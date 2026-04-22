@@ -1,0 +1,35 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Codex Script Starter",
+    "description": "A small scripted Minecraft Bedrock add-on starter.",
+    "uuid": "08afe2d4-9024-4dd0-9431-b4f3a9561869",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 21, 0]
+  },
+  "modules": [
+    {
+      "description": "Command functions and behavior data",
+      "type": "data",
+      "uuid": "b4b06fdb-9767-44ad-9ead-cb98317605d8",
+      "version": [1, 0, 0]
+    },
+    {
+      "description": "JavaScript gameplay scripts",
+      "type": "script",
+      "language": "javascript",
+      "entry": "scripts/main.js",
+      "uuid": "9ad11690-f8e0-4e86-a5bd-00035201e6e0",
+      "version": [1, 0, 0]
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "1.17.0"
+    }
+  ],
+  "metadata": {
+    "authors": ["Codex"]
+  }
+}
