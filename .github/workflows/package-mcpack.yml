@@ -19,8 +19,8 @@ jobs:
         shell: pwsh
         run: ./scripts/package.ps1
 
-      - name: Upload mcpack artifact
+      - name: Upload add-on artifact
         uses: actions/upload-artifact@v4
         with:
-          name: quinns-enderstorm-mcpack
-          path: dist/quinns-enderstorm.mcpack
+          name: quinns-enderstorm-addon
+          path: dist/quinns-enderstorm.mcaddon

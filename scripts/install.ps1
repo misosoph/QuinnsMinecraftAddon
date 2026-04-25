@@ -6,11 +6,17 @@ param(
 $ErrorActionPreference = "Stop"
 
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
-$packName = "quinns_enderstorm_bp"
-$packSource = Join-Path $projectRoot "behavior_packs\$packName"
+$behaviorPackName = "quinns_enderstorm_bp"
+$resourcePackName = "quinns_enderstorm_rp"
+$behaviorPackSource = Join-Path $projectRoot "behavior_packs\$behaviorPackName"
+$resourcePackSource = Join-Path $projectRoot "resource_packs\$resourcePackName"
 
-if (-not (Test-Path (Join-Path $packSource "manifest.json"))) {
-  throw "Behavior pack manifest not found: $packSource"
+if (-not (Test-Path (Join-Path $behaviorPackSource "manifest.json"))) {
+  throw "Behavior pack manifest not found: $behaviorPackSource"
+}
+
+if (-not (Test-Path (Join-Path $resourcePackSource "manifest.json"))) {
+  throw "Resource pack manifest not found: $resourcePackSource"
 }
 
 & (Join-Path $PSScriptRoot "build.ps1")
@@ -31,12 +37,18 @@ if ([string]::IsNullOrWhiteSpace($MinecraftComMojangPath)) {
 }
 
 $developmentPacks = Join-Path $MinecraftComMojangPath "development_behavior_packs"
-$packTarget = Join-Path $developmentPacks $packName
+$developmentResources = Join-Path $MinecraftComMojangPath "development_resource_packs"
+$behaviorPackTarget = Join-Path $developmentPacks $behaviorPackName
+$resourcePackTarget = Join-Path $developmentResources $resourcePackName
 
-New-Item -ItemType Directory -Force -Path $packTarget | Out-Null
-Copy-Item -Path (Join-Path $packSource "*") -Destination $packTarget -Recurse -Force
+New-Item -ItemType Directory -Force -Path $behaviorPackTarget | Out-Null
+New-Item -ItemType Directory -Force -Path $resourcePackTarget | Out-Null
+Copy-Item -Path (Join-Path $behaviorPackSource "*") -Destination $behaviorPackTarget -Recurse -Force
+Copy-Item -Path (Join-Path $resourcePackSource "*") -Destination $resourcePackTarget -Recurse -Force
 
 Write-Host "Installed behavior pack:"
-Write-Host "  $packTarget"
+Write-Host "  $behaviorPackTarget"
+Write-Host "Installed resource pack:"
+Write-Host "  $resourcePackTarget"
 Write-Host ""
-Write-Host "Activate 'Quinn''s Enderstorm' in a Minecraft Bedrock test world's Behavior Packs list."
+Write-Host "Activate 'Quinn''s Enderstorm Resources' under Resource Packs and 'Quinn''s Enderstorm' under Behavior Packs."

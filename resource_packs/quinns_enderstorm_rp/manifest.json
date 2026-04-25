@@ -1,0 +1,20 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Quinn's Enderstorm Resources",
+    "description": "Visual battle effects for Quinn's Enderstorm.",
+    "uuid": "3ff99120-0f6d-4e1f-92ba-b63c67098873",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 21, 0]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "e3dbb51f-3c41-4a27-b565-d42cc8bcf247",
+      "version": [1, 0, 0]
+    }
+  ],
+  "metadata": {
+    "authors": ["Quinn"]
+  }
+}

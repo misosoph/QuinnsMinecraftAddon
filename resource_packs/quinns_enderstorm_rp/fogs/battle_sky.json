@@ -1,0 +1,22 @@
+{
+  "format_version": "1.16.100",
+  "minecraft:fog_settings": {
+    "description": {
+      "identifier": "quinns_enderstorm:battle_sky"
+    },
+    "distance": {
+      "air": {
+        "fog_start": 0.15,
+        "fog_end": 0.62,
+        "fog_color": "#4a0006",
+        "render_distance_type": "render"
+      },
+      "weather": {
+        "fog_start": 0.08,
+        "fog_end": 0.45,
+        "fog_color": "#2b0000",
+        "render_distance_type": "render"
+      }
+    }
+  }
+}

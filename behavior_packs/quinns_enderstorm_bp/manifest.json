@@ -27,6 +27,10 @@
     {
       "module_name": "@minecraft/server",
       "version": "1.17.0"
+    },
+    {
+      "uuid": "3ff99120-0f6d-4e1f-92ba-b63c67098873",
+      "version": [1, 0, 0]
     }
   ],
   "metadata": {
