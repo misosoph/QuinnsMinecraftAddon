@@ -5,10 +5,10 @@ A tiny Minecraft Bedrock behavior pack that uses the Script API.
 ## What It Does
 
 - Starts Quinn's Treasure Hunt when a player joins.
-- Picks a nearby hidden treasure target for each player.
-- Shows action bar clues with distance and direction.
-- Gives a reward when the player reaches the hidden spot.
-- Adds a fallback command function you can run with `/function hello`.
+- Picks a nearby altar target for each player.
+- Spawns Quinn's Enderstorm when the altar is reached.
+- Rewards the winner with an overpowered Iron-Gold Stormbreaker pickaxe.
+- Adds test functions you can run with `/function hello`, `/function summon_enderstorm`, and `/function reset_hunt`.
 
 ## Files
 
@@ -61,7 +61,8 @@ uses a custom location, pass it explicitly:
 4. Activate `Codex Script Starter` under Behavior Packs.
 5. Enter the world.
 6. You should see Quinn's treasure hunt messages and action bar clues.
-7. Follow the action bar until you find the hidden spot.
-8. Run `/function hello` if you want a compass and night vision.
+7. Reach the altar or run `/function summon_enderstorm` to start the boss.
+8. Defeat Quinn's Enderstorm to earn the Stormbreaker pickaxe.
+9. Run `/function reset_hunt` to reset the boss and reward tags for another test.
 
 If the pack does not load, enable the Content Log in `Settings > Creator`.
