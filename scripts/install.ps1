@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
-$packName = "codex_script_starter_bp"
+$packName = "quinns_enderstorm_bp"
 $packSource = Join-Path $projectRoot "behavior_packs\$packName"
 
 if (-not (Test-Path (Join-Path $packSource "manifest.json"))) {
@@ -39,4 +39,4 @@ Copy-Item -Path (Join-Path $packSource "*") -Destination $packTarget -Recurse -F
 Write-Host "Installed behavior pack:"
 Write-Host "  $packTarget"
 Write-Host ""
-Write-Host "Activate 'Codex Script Starter' in a Minecraft Bedrock test world's Behavior Packs list."
+Write-Host "Activate 'Quinn''s Enderstorm' in a Minecraft Bedrock test world's Behavior Packs list."

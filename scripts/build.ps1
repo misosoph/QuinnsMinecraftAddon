@@ -5,7 +5,7 @@ $ErrorActionPreference = "Stop"
 
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $source = Join-Path $projectRoot "src\main.ts"
-$target = Join-Path $projectRoot "behavior_packs\codex_script_starter_bp\scripts\main.js"
+$target = Join-Path $projectRoot "behavior_packs\quinns_enderstorm_bp\scripts\main.js"
 
 if (-not (Test-Path $source)) {
   throw "Source file not found: $source"

@@ -4,11 +4,11 @@ param()
 $ErrorActionPreference = "Stop"
 
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
-$packName = "codex_script_starter_bp"
+$packName = "quinns_enderstorm_bp"
 $packSource = Join-Path $projectRoot "behavior_packs\$packName"
 $dist = Join-Path $projectRoot "dist"
-$zipPath = Join-Path $dist "codex-script-starter.zip"
-$mcpackPath = Join-Path $dist "codex-script-starter.mcpack"
+$zipPath = Join-Path $dist "quinns-enderstorm.zip"
+$mcpackPath = Join-Path $dist "quinns-enderstorm.mcpack"
 
 & (Join-Path $PSScriptRoot "build.ps1")
 

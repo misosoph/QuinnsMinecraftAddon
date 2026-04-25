@@ -22,5 +22,5 @@ jobs:
       - name: Upload mcpack artifact
         uses: actions/upload-artifact@v4
         with:
-          name: codex-script-starter-mcpack
-          path: dist/codex-script-starter.mcpack
+          name: quinns-enderstorm-mcpack
+          path: dist/quinns-enderstorm.mcpack

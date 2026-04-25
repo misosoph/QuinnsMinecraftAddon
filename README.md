@@ -1,6 +1,6 @@
-# Codex Script Starter
+# Quinn's Enderstorm
 
-A tiny Minecraft Bedrock behavior pack that uses the Script API.
+A Minecraft Bedrock behavior pack built around Quinn's Enderstorm boss fight.
 
 ## What It Does
 
@@ -13,23 +13,23 @@ A tiny Minecraft Bedrock behavior pack that uses the Script API.
 ## Files
 
 ```text
-codex-script-starter
-├─ behavior_packs
-│  └─ codex_script_starter_bp
-│     ├─ manifest.json
-│     ├─ functions
-│     │  └─ hello.mcfunction
-│     └─ scripts
-│        └─ main.js
-├─ scripts
-│  ├─ build.ps1
-│  ├─ install.ps1
-│  └─ package.ps1
-└─ src
-   └─ main.ts
+QuinnsMinecraftAddon
+|-- behavior_packs
+|   `-- quinns_enderstorm_bp
+|       |-- manifest.json
+|       |-- functions
+|       |   `-- hello.mcfunction
+|       `-- scripts
+|           `-- main.js
+|-- scripts
+|   |-- build.ps1
+|   |-- install.ps1
+|   `-- package.ps1
+`-- src
+    `-- main.ts
 ```
 
-Minecraft loads JavaScript from `behavior_packs/codex_script_starter_bp/scripts/main.js`.
+Minecraft loads JavaScript from `behavior_packs/quinns_enderstorm_bp/scripts/main.js`.
 The source file in `src/main.ts` is intentionally written as TypeScript-flavored
 JavaScript so the beginner build step can copy it directly without installing npm
 packages. Later, this project can be upgraded to a full TypeScript compiler setup.
@@ -46,7 +46,7 @@ packages. Later, this project can be upgraded to a full TypeScript compiler setu
 .\scripts\package.ps1
 ```
 
-This creates `dist/codex-script-starter.mcpack`.
+This creates `dist/quinns-enderstorm.mcpack`.
 
 > Note: do not commit `*.mcpack` binaries to pull requests if your PR workflow
 > rejects binary files. This repo ignores `dist/*.mcpack` and publishes the
@@ -56,7 +56,7 @@ This creates `dist/codex-script-starter.mcpack`.
 
 1. Open the **Actions** tab in GitHub.
 2. Run **Package Minecraft Add-on** (or open any recent run on your branch/PR).
-3. Download the **codex-script-starter-mcpack** artifact.
+3. Download the **quinns-enderstorm-mcpack** artifact.
 4. Save it to Files on iPad and open it in Minecraft.
 
 ## Install For Local Testing
@@ -77,7 +77,7 @@ uses a custom location, pass it explicitly:
 1. Open Minecraft Bedrock.
 2. Create or edit a test world.
 3. Enable cheats for the world.
-4. Activate `Codex Script Starter` under Behavior Packs.
+4. Activate `Quinn's Enderstorm` under Behavior Packs.
 5. Enter the world.
 6. You should see Quinn's treasure hunt messages and action bar clues.
 7. Reach the altar or run `/function summon_enderstorm` to start the boss.

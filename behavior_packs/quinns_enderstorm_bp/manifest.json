@@ -1,8 +1,8 @@
 {
   "format_version": 2,
   "header": {
-    "name": "Codex Script Starter",
-    "description": "A small scripted Minecraft Bedrock add-on starter.",
+    "name": "Quinn's Enderstorm",
+    "description": "A scripted Minecraft Bedrock add-on featuring Quinn's Enderstorm boss fight.",
     "uuid": "08afe2d4-9024-4dd0-9431-b4f3a9561869",
     "version": [1, 0, 0],
     "min_engine_version": [1, 21, 0]
@@ -30,6 +30,6 @@
     }
   ],
   "metadata": {
-    "authors": ["Codex"]
+    "authors": ["Quinn"]
   }
 }
