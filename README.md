@@ -40,6 +40,25 @@ packages. Later, this project can be upgraded to a full TypeScript compiler setu
 .\scripts\build.ps1
 ```
 
+## Pack For Sharing (Web/iPad Friendly)
+
+```powershell
+.\scripts\package.ps1
+```
+
+This creates `dist/codex-script-starter.mcpack`.
+
+> Note: do not commit `*.mcpack` binaries to pull requests if your PR workflow
+> rejects binary files. This repo ignores `dist/*.mcpack` and publishes the
+> package as a GitHub Actions artifact instead.
+
+### Get the package without running PowerShell (web/iPad)
+
+1. Open the **Actions** tab in GitHub.
+2. Run **Package Minecraft Add-on** (or open any recent run on your branch/PR).
+3. Download the **codex-script-starter-mcpack** artifact.
+4. Save it to Files on iPad and open it in Minecraft.
+
 ## Install For Local Testing
 
 ```powershell

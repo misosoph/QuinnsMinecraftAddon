@@ -1,0 +1,26 @@
+name: Package Minecraft Add-on
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and package
+        shell: pwsh
+        run: ./scripts/package.ps1
+
+      - name: Upload mcpack artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: codex-script-starter-mcpack
+          path: dist/codex-script-starter.mcpack
