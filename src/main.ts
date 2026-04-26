@@ -25,6 +25,7 @@ const MAX_ENDERMITES = 16;
 const PHASE_ONE_VIRTUAL_HEALTH = 7000;
 const PHASE_TWO_VIRTUAL_HEALTH = 12000;
 const TARGET_RAID_SIZE = 5;
+const ENDERESTORM_BOSS_ID = "quinns_enderstorm:boss";
 const FORCE_ENDERSTORM_TAG = "quinn_force_enderstorm";
 const ENDERESTORM_ENTITY_TAG = "quinn_enderstorm";
 const ENDERESTORM_SUMMONED_TAG = "quinn_enderstorm_summoned";
@@ -695,7 +696,7 @@ function spawnEnderstorm(player, spawnLocation) {
     return existingStorm;
   }
 
-  const storm = player.dimension.spawnEntity("minecraft:ghast", {
+  const storm = player.dimension.spawnEntity(ENDERESTORM_BOSS_ID, {
     x: spawnLocation.x,
     y: spawnLocation.y + 18,
     z: spawnLocation.z,
