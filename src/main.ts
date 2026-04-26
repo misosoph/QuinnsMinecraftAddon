@@ -12,16 +12,21 @@ const seenPlayers = new Set();
 const activeHunts = new Map();
 const stormBattleState = new Map();
 const TREASURE_RADIUS = 5;
-const ARENA_RADIUS = 22;
-const ARENA_CLEAR_HEIGHT = 18;
-const STORM_SUPPORT_RADIUS = 96;
-const STORM_HELPER_RADIUS = 54;
-const ENDERMITE_SUMMON_INTERVAL = 140;
+const ARENA_RADIUS = 36;
+const ARENA_CLEAR_HEIGHT = 44;
+const STORM_SUPPORT_RADIUS = 140;
+const STORM_HELPER_RADIUS = 96;
+const ENDERMITE_SUMMON_INTERVAL = 120;
 const HELPER_VOLLEY_INTERVAL = 40;
-const TENTACLE_STRIKE_INTERVAL = 90;
-const MAX_ENDERMITES = 10;
+const PHASE_ONE_TENTACLE_STRIKE_INTERVAL = 80;
+const PHASE_TWO_TENTACLE_STRIKE_INTERVAL = 45;
+const PHASE_TWO_LIGHTNING_INTERVAL = 30;
+const MAX_ENDERMITES = 16;
+const PHASE_ONE_HEADS = 3;
+const PHASE_TWO_HEADS = 6;
 const TARGET_RAID_SIZE = 5;
-const STORM_MAX_VIRTUAL_HEALTH = 2200;
+const PHASE_ONE_VIRTUAL_HEALTH = 7000;
+const PHASE_TWO_VIRTUAL_HEALTH = 12000;
 const FORCE_ENDERSTORM_TAG = "quinn_force_enderstorm";
 const ENDERESTORM_ENTITY_TAG = "quinn_enderstorm";
 const ENDERESTORM_SUMMONED_TAG = "quinn_enderstorm_summoned";
@@ -286,11 +291,15 @@ function getStormState(storm) {
     const visibleHealth = health ? health.effectiveMax : 300;
 
     stormBattleState.set(storm.id, {
+      arenaCenter: { ...storm.location },
       lastEndermiteTick: 0,
       lastHelperVolleyTick: 0,
       lastTentacleTick: 0,
-      maxVirtualHealth: STORM_MAX_VIRTUAL_HEALTH,
-      virtualHealth: STORM_MAX_VIRTUAL_HEALTH,
+      lastLightningTick: 0,
+      phase: 1,
+      transitioningPhase: false,
+      maxVirtualHealth: PHASE_ONE_VIRTUAL_HEALTH,
+      virtualHealth: PHASE_ONE_VIRTUAL_HEALTH,
       lastVisibleHealth: visibleHealth,
     });
   }
@@ -325,6 +334,11 @@ function syncStormHealth(storm) {
   }
 
   if (state.virtualHealth <= 0) {
+    if (state.phase === 1 && !state.transitioningPhase) {
+      startPhaseTwo(storm);
+      return;
+    }
+
     storm.kill();
     return;
   }
@@ -341,27 +355,115 @@ function syncStormHealth(storm) {
   state.lastVisibleHealth = desiredVisibleHealth;
 }
 
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function clampLocationToArena(location, center, radius) {
+  return {
+    x: clamp(location.x, center.x - radius, center.x + radius),
+    y: location.y,
+    z: clamp(location.z, center.z - radius, center.z + radius),
+  };
+}
+
+function moveStormWithinArena(storm) {
+  const state = getStormState(storm);
+  const center = state.arenaCenter ?? storm.location;
+  const raiders = getRaidPlayers(center, STORM_SUPPORT_RADIUS, storm.dimension);
+
+  if (raiders.length === 0) {
+    const homeY = center.y + (state.phase === 1 ? 18 : 46);
+    const current = storm.location;
+    const dx = center.x - current.x;
+    const dz = center.z - current.z;
+    const distance = Math.sqrt(dx * dx + dz * dz);
+
+    if (distance > 2 || Math.abs(current.y - homeY) > 3) {
+      const step = Math.min(1.4, distance || 0);
+      storm.teleport({
+        x: distance > 0 ? current.x + (dx / distance) * step : center.x,
+        y: current.y + Math.sign(homeY - current.y) * Math.min(1.2, Math.abs(homeY - current.y)),
+        z: distance > 0 ? current.z + (dz / distance) * step : center.z,
+      });
+    }
+
+    return;
+  }
+
+  let targetPlayer = raiders[0];
+  let nearestDistance = Number.POSITIVE_INFINITY;
+
+  for (const player of raiders) {
+    const distance = horizontalDistance(player.location, storm.location);
+
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      targetPlayer = player;
+    }
+  }
+
+  const desiredY = center.y + (state.phase === 1 ? 18 : 46);
+  const desiredTarget = clampLocationToArena(targetPlayer.location, center, ARENA_RADIUS - 4);
+  const current = storm.location;
+  const dx = desiredTarget.x - current.x;
+  const dz = desiredTarget.z - current.z;
+  const distance = Math.sqrt(dx * dx + dz * dz);
+  const maxStep = state.phase === 1 ? 1.1 : 1.5;
+  const step = Math.min(maxStep, distance || 0);
+  const nextX = distance > 0 ? current.x + (dx / distance) * step : current.x;
+  const nextZ = distance > 0 ? current.z + (dz / distance) * step : current.z;
+  const nextLocation = clampLocationToArena(
+    {
+      x: nextX,
+      y: current.y + Math.sign(desiredY - current.y) * Math.min(1.3, Math.abs(desiredY - current.y)),
+      z: nextZ,
+    },
+    center,
+    ARENA_RADIUS - 2,
+  );
+
+  storm.teleport(nextLocation);
+}
+
 function buffEnderstorm(storm) {
-  storm.nameTag = "Quinn's Purple Enderstorm";
-  storm.addEffect("resistance", 120, { amplifier: 1, showParticles: false });
-  storm.addEffect("regeneration", 120, { amplifier: 1, showParticles: false });
-  storm.addEffect("speed", 120, { amplifier: 1, showParticles: false });
+  const state = getStormState(storm);
+
+  if (state.phase === 1) {
+    storm.nameTag = "Quinn's Purple Enderstorm";
+    storm.addEffect("resistance", 120, { amplifier: 1, showParticles: false });
+    storm.addEffect("regeneration", 120, { amplifier: 1, showParticles: false });
+    storm.addEffect("speed", 120, { amplifier: 1, showParticles: false });
+    return;
+  }
+
+  storm.nameTag = "Quinn's Ascended Enderstorm";
+  storm.addEffect("resistance", 120, { amplifier: 2, showParticles: false });
+  storm.addEffect("regeneration", 120, { amplifier: 2, showParticles: false });
+  storm.addEffect("speed", 120, { amplifier: 2, showParticles: false });
+  storm.addEffect("strength", 120, { amplifier: 1, showParticles: false });
+}
+
+function getHeadCountForPhase(phase) {
+  return phase === 1 ? PHASE_ONE_HEADS : PHASE_TWO_HEADS;
 }
 
 function spawnStormHeads(storm) {
+  const state = getStormState(storm);
   const existingHeads = getTaggedEntitiesNear(
     storm.dimension,
     ENDERESTORM_HEAD_TAG,
     storm.location,
     STORM_HELPER_RADIUS,
   );
+  const desiredHeads = getHeadCountForPhase(state.phase);
 
-  for (let index = existingHeads.length; index < 3; index++) {
-    const angle = index * ((Math.PI * 2) / 3);
+  for (let index = existingHeads.length; index < desiredHeads; index++) {
+    const angle = index * ((Math.PI * 2) / desiredHeads);
     const head = storm.dimension.spawnEntity("minecraft:enderman", {
-      x: storm.location.x + Math.cos(angle) * 5,
-      y: storm.location.y + 3 + index,
-      z: storm.location.z + Math.sin(angle) * 5,
+      x: storm.location.x + Math.cos(angle) * (state.phase === 1 ? 8 : 16),
+      y: storm.location.y + 6 + index * 2,
+      z: storm.location.z + Math.sin(angle) * (state.phase === 1 ? 8 : 16),
     });
 
     head.nameTag = `Enderstorm Head ${index + 1}`;
@@ -373,21 +475,23 @@ function spawnStormHeads(storm) {
 }
 
 function updateStormHeads(storm) {
+  const state = getStormState(storm);
+  const desiredHeads = getHeadCountForPhase(state.phase);
   const heads = getTaggedEntitiesNear(
     storm.dimension,
     ENDERESTORM_HEAD_TAG,
     storm.location,
     STORM_HELPER_RADIUS,
-  ).slice(0, 3);
+  ).slice(0, desiredHeads);
 
-  const baseAngle = system.currentTick / 14;
+  const baseAngle = system.currentTick / (state.phase === 1 ? 14 : 10);
 
   heads.forEach((head, index) => {
-    const angle = baseAngle + index * ((Math.PI * 2) / 3);
-    const radius = 5 + index * 1.5;
+    const angle = baseAngle + index * ((Math.PI * 2) / Math.max(1, desiredHeads));
+    const radius = (state.phase === 1 ? 8 : 16) + index * (state.phase === 1 ? 1.2 : 1.8);
     head.teleport({
       x: storm.location.x + Math.cos(angle) * radius,
-      y: storm.location.y + 3 + index * 2,
+      y: storm.location.y + 6 + index * (state.phase === 1 ? 2 : 3),
       z: storm.location.z + Math.sin(angle) * radius,
     });
   });
@@ -408,42 +512,106 @@ function summonEndermiteWave(storm) {
     storm.location,
     STORM_HELPER_RADIUS,
   );
-  const mitesToSpawn = Math.max(1, Math.min(3, MAX_ENDERMITES - nearbyMites.length));
+  const mitesToSpawn = Math.max(1, Math.min(state.phase === 1 ? 3 : 5, MAX_ENDERMITES - nearbyMites.length));
 
   for (let index = 0; index < mitesToSpawn; index++) {
     const angle = (system.currentTick / 9) + index * ((Math.PI * 2) / 3);
     const mite = storm.dimension.spawnEntity("minecraft:endermite", {
-      x: storm.location.x + Math.cos(angle) * 7,
-      y: storm.location.y - 7,
-      z: storm.location.z + Math.sin(angle) * 7,
+      x: storm.location.x + Math.cos(angle) * (state.phase === 1 ? 10 : 18),
+      y: storm.location.y - (state.phase === 1 ? 10 : 16),
+      z: storm.location.z + Math.sin(angle) * (state.phase === 1 ? 10 : 18),
     });
 
     mite.nameTag = "Enderstorm Tentacle";
     mite.addTag(ENDERESTORM_MINION_TAG);
     mite.addTag(ENDERESTORM_HELPER_TAG);
-    mite.addEffect("speed", 60, { amplifier: 1, showParticles: false });
-    mite.addEffect("strength", 60, { amplifier: 0, showParticles: false });
+    mite.addEffect("speed", 60, { amplifier: state.phase === 1 ? 1 : 2, showParticles: false });
+    mite.addEffect("strength", 60, { amplifier: state.phase === 1 ? 0 : 1, showParticles: false });
   }
 }
 
 function strikePlayersWithTentacles(storm) {
   const state = getStormState(storm);
 
-  if (system.currentTick - state.lastTentacleTick < TENTACLE_STRIKE_INTERVAL) {
+  const interval = state.phase === 1 ? PHASE_ONE_TENTACLE_STRIKE_INTERVAL : PHASE_TWO_TENTACLE_STRIKE_INTERVAL;
+
+  if (system.currentTick - state.lastTentacleTick < interval) {
     return;
   }
 
   state.lastTentacleTick = system.currentTick;
 
-  const raiders = getRaidPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension).slice(0, 3);
+  const raiders = getRaidPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension).slice(0, state.phase === 1 ? 3 : 5);
 
   for (const player of raiders) {
-    if (horizontalDistance(player.location, storm.location) < 10) {
-      player.applyDamage(6);
-      runPlayerCommand(player, "effect @s slowness 2 1 true");
-      player.sendMessage("A purple tentacle slams into you.");
+    const distance = horizontalDistance(player.location, storm.location);
+
+    if (distance > (state.phase === 1 ? 24 : 36)) {
+      continue;
     }
+
+    player.applyDamage(state.phase === 1 ? 8 : 12);
+    runPlayerCommand(player, `effect @s slowness ${state.phase === 1 ? 2 : 3} 1 true`);
+    runPlayerCommand(player, `effect @s weakness ${state.phase === 1 ? 2 : 3} 0 true`);
+    player.sendMessage(state.phase === 1 ? "A giant purple tentacle whips into you." : "An ascended tentacle crushes through the storm and slams you.");
   }
+}
+
+function summonLightningNearPlayer(player) {
+  const location = toBlockLocation(player.location);
+  const x = location.x + ((system.currentTick % 7) - 3);
+  const z = location.z + (((system.currentTick + 3) % 7) - 3);
+  runPlayerCommand(player, `summon lightning_bolt ${x} ${location.y} ${z}`);
+}
+
+function triggerPhaseTwoLightning(storm) {
+  const state = getStormState(storm);
+
+  if (state.phase !== 2) {
+    return;
+  }
+
+  if (system.currentTick - state.lastLightningTick < PHASE_TWO_LIGHTNING_INTERVAL) {
+    return;
+  }
+
+  state.lastLightningTick = system.currentTick;
+
+  for (const player of getRaidPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension).slice(0, 3)) {
+    summonLightningNearPlayer(player);
+  }
+}
+
+function startPhaseTwo(storm) {
+  const state = getStormState(storm);
+  const health = getStormHealth(storm);
+
+  state.transitioningPhase = true;
+  state.phase = 2;
+  state.maxVirtualHealth = PHASE_TWO_VIRTUAL_HEALTH;
+  state.virtualHealth = PHASE_TWO_VIRTUAL_HEALTH;
+  state.lastEndermiteTick = 0;
+  state.lastTentacleTick = 0;
+  state.lastHelperVolleyTick = 0;
+  state.lastLightningTick = 0;
+
+  if (health) {
+    health.resetToMaxValue();
+    state.lastVisibleHealth = health.effectiveMax;
+  }
+
+  storm.teleport({
+    x: storm.location.x,
+    y: storm.location.y + 28,
+    z: storm.location.z,
+  });
+
+  for (const player of getRaidPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension)) {
+    player.sendMessage("The Enderstorm rises into an ascended second phase. Lightning tears across the sky.");
+    runPlayerCommand(player, "playsound ambient.weather.thunder @s");
+  }
+
+  state.transitioningPhase = false;
 }
 
 function spawnHelperArcher(storm, index) {
@@ -514,7 +682,7 @@ function fireHelperVolleys(storm, helperCount) {
   }
 
   state.lastHelperVolleyTick = system.currentTick;
-  state.virtualHealth = Math.max(0, state.virtualHealth - helperCount * 3);
+  state.virtualHealth = Math.max(0, state.virtualHealth - helperCount * (state.phase === 1 ? 2 : 3));
 
   for (const player of getRaidPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension)) {
     runPlayerCommand(player, "playsound random.bow @s");
@@ -534,10 +702,12 @@ function cleanupStormHelpers(location, dimension) {
 function updateStormBattle(storm) {
   buffEnderstorm(storm);
   syncStormHealth(storm);
+  moveStormWithinArena(storm);
   spawnStormHeads(storm);
   updateStormHeads(storm);
   summonEndermiteWave(storm);
   strikePlayersWithTentacles(storm);
+  triggerPhaseTwoLightning(storm);
   const helperCount = ensureHelperArchers(storm);
   fireHelperVolleys(storm, helperCount);
 }
@@ -558,12 +728,13 @@ function spawnEnderstorm(player, spawnLocation) {
 
   const storm = player.dimension.spawnEntity("minecraft:wither", {
     x: spawnLocation.x,
-    y: spawnLocation.y + 10,
+    y: spawnLocation.y + 18,
     z: spawnLocation.z,
   });
 
   storm.addTag(ENDERESTORM_ENTITY_TAG);
   initializeStormHealth(storm);
+  getStormState(storm).arenaCenter = { ...spawnLocation };
   updateStormBattle(storm);
 
   player.addTag(ENDERESTORM_SUMMONED_TAG);
@@ -790,7 +961,7 @@ function updateTreasureHunt(player) {
     const stormPercent = Math.max(1, Math.ceil((state.virtualHealth / state.maxVirtualHealth) * 100));
 
     player.onScreenDisplay.setActionBar(
-      `Purple Enderstorm: ${stormPercent}% | Raiders ${raidPlayers} | NPC Archers ${archers}`,
+      `Phase ${state.phase} Enderstorm: ${stormPercent}% | Raiders ${raidPlayers} | NPC Archers ${archers}`,
     );
     return;
   }
