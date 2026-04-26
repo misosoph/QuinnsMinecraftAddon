@@ -12,6 +12,14 @@
       "geometry": {
         "default": "geometry.quinns_enderstorm_boss"
       },
+      "animations": {
+        "idle_spin": "animation.quinns_enderstorm_boss.idle_spin"
+      },
+      "scripts": {
+        "animate": [
+          "idle_spin"
+        ]
+      },
       "render_controllers": [
         "controller.render.default"
       ]

@@ -22,8 +22,8 @@ const PHASE_ONE_TENTACLE_STRIKE_INTERVAL = 80;
 const PHASE_TWO_TENTACLE_STRIKE_INTERVAL = 45;
 const PHASE_TWO_LIGHTNING_INTERVAL = 60;
 const MAX_ENDERMITES = 8;
-const PHASE_ONE_VIRTUAL_HEALTH = 7000;
-const PHASE_TWO_VIRTUAL_HEALTH = 12000;
+const PHASE_ONE_VIRTUAL_HEALTH = 3500;
+const PHASE_TWO_VIRTUAL_HEALTH = 6000;
 const TARGET_RAID_SIZE = 5;
 const ENDERESTORM_BOSS_ID = "quinns_enderstorm:boss";
 const FORCE_ENDERSTORM_TAG = "quinn_force_enderstorm";
@@ -400,7 +400,7 @@ function moveStormWithinArena(storm) {
   const raiders = getRaidPlayers(center, STORM_SUPPORT_RADIUS, storm.dimension);
 
   if (raiders.length === 0) {
-    const homeY = center.y + (state.phase === 1 ? 16 : 28);
+    const homeY = center.y + (state.phase === 1 ? 8 : 14);
     const current = storm.location;
     const dx = center.x - current.x;
     const dz = center.z - current.z;
@@ -430,7 +430,7 @@ function moveStormWithinArena(storm) {
     }
   }
 
-  const desiredY = center.y + (state.phase === 1 ? 16 : 28);
+  const desiredY = center.y + (state.phase === 1 ? 8 : 14);
   const desiredTarget = clampLocationToArena(targetPlayer.location, center, ARENA_RADIUS - 4);
   const current = storm.location;
   const dx = desiredTarget.x - current.x;
@@ -575,7 +575,7 @@ function startPhaseTwo(storm) {
 
   storm.teleport({
     x: storm.location.x,
-    y: storm.location.y + 28,
+    y: storm.location.y + 12,
     z: storm.location.z,
   });
 
@@ -711,7 +711,7 @@ function spawnEnderstorm(player, spawnLocation) {
 
   const storm = player.dimension.spawnEntity(ENDERESTORM_BOSS_ID, {
     x: spawnLocation.x,
-    y: spawnLocation.y + 18,
+    y: spawnLocation.y + 8,
     z: spawnLocation.z,
   });
 

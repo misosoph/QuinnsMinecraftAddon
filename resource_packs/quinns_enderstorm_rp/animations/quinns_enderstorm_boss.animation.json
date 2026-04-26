@@ -1,0 +1,19 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.quinns_enderstorm_boss.idle_spin": {
+      "loop": true,
+      "bones": {
+        "tornado_base": {
+          "rotation": [0, "query.life_time * 6", 0]
+        },
+        "tornado_ring_lower": {
+          "rotation": [0, "query.life_time * 10", 0]
+        },
+        "tornado_ring_mid": {
+          "rotation": [0, "-query.life_time * 8", 0]
+        }
+      }
+    }
+  }
+}
