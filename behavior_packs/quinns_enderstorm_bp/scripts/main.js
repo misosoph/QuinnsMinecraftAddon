@@ -15,23 +15,20 @@ const TREASURE_RADIUS = 5;
 const ARENA_RADIUS = 36;
 const ARENA_CLEAR_HEIGHT = 44;
 const STORM_SUPPORT_RADIUS = 140;
-const STORM_HELPER_RADIUS = 96;
+const STORM_MINION_RADIUS = 96;
 const ENDERMITE_SUMMON_INTERVAL = 120;
 const HELPER_VOLLEY_INTERVAL = 40;
 const PHASE_ONE_TENTACLE_STRIKE_INTERVAL = 80;
 const PHASE_TWO_TENTACLE_STRIKE_INTERVAL = 45;
 const PHASE_TWO_LIGHTNING_INTERVAL = 30;
 const MAX_ENDERMITES = 16;
-const PHASE_ONE_HEADS = 3;
-const PHASE_TWO_HEADS = 6;
-const TARGET_RAID_SIZE = 5;
 const PHASE_ONE_VIRTUAL_HEALTH = 7000;
 const PHASE_TWO_VIRTUAL_HEALTH = 12000;
+const TARGET_RAID_SIZE = 5;
 const FORCE_ENDERSTORM_TAG = "quinn_force_enderstorm";
 const ENDERESTORM_ENTITY_TAG = "quinn_enderstorm";
 const ENDERESTORM_SUMMONED_TAG = "quinn_enderstorm_summoned";
 const ENDERESTORM_DEFEATED_TAG = "quinn_enderstorm_defeated";
-const ENDERESTORM_HEAD_TAG = "quinn_enderstorm_head";
 const ENDERESTORM_MINION_TAG = "quinn_enderstorm_minion";
 const ENDERESTORM_HELPER_TAG = "quinn_enderstorm_helper";
 const ENDERESTORM_ARCHER_TAG = "quinn_enderstorm_archer";
@@ -230,22 +227,40 @@ function clearBattleSkyForNearbyPlayers(location, dimension) {
   }
 }
 
-function flattenBattleArena(player, center) {
+function earthquakeFlattenArena(player, center) {
   const blockCenter = toBlockLocation(center);
   const minX = blockCenter.x - ARENA_RADIUS;
   const maxX = blockCenter.x + ARENA_RADIUS;
   const minZ = blockCenter.z - ARENA_RADIUS;
   const maxZ = blockCenter.z + ARENA_RADIUS;
-  const floorY = blockCenter.y - 1;
+  const stoneFloorY = blockCenter.y - 8;
+  const dirtFloorY = blockCenter.y - 3;
+  const surfaceY = blockCenter.y - 1;
   const clearTopY = blockCenter.y + ARENA_CLEAR_HEIGHT;
 
   runPlayerCommand(
     player,
-    `fill ${minX} ${floorY} ${minZ} ${maxX} ${floorY} ${maxZ} bedrock replace`,
+    "playsound random.explode @a[r=96]",
   );
   runPlayerCommand(
     player,
-    `fill ${minX} ${blockCenter.y} ${minZ} ${maxX} ${clearTopY} ${maxZ} air replace`,
+    "playsound ambient.weather.thunder @a[r=96]",
+  );
+  runPlayerCommand(
+    player,
+    `fill ${minX} ${surfaceY + 1} ${minZ} ${maxX} ${clearTopY} ${maxZ} air replace`,
+  );
+  runPlayerCommand(
+    player,
+    `fill ${minX} ${stoneFloorY} ${minZ} ${maxX} ${dirtFloorY - 1} ${maxZ} stone replace air`,
+  );
+  runPlayerCommand(
+    player,
+    `fill ${minX} ${dirtFloorY} ${minZ} ${maxX} ${surfaceY - 1} ${maxZ} dirt replace air`,
+  );
+  runPlayerCommand(
+    player,
+    `fill ${minX} ${surfaceY} ${minZ} ${maxX} ${surfaceY} ${maxZ} grass_block replace`,
   );
 }
 
@@ -373,7 +388,7 @@ function moveStormWithinArena(storm) {
   const raiders = getRaidPlayers(center, STORM_SUPPORT_RADIUS, storm.dimension);
 
   if (raiders.length === 0) {
-    const homeY = center.y + (state.phase === 1 ? 18 : 46);
+    const homeY = center.y + (state.phase === 1 ? 18 : 34);
     const current = storm.location;
     const dx = center.x - current.x;
     const dz = center.z - current.z;
@@ -403,7 +418,7 @@ function moveStormWithinArena(storm) {
     }
   }
 
-  const desiredY = center.y + (state.phase === 1 ? 18 : 46);
+  const desiredY = center.y + (state.phase === 1 ? 18 : 34);
   const desiredTarget = clampLocationToArena(targetPlayer.location, center, ARENA_RADIUS - 4);
   const current = storm.location;
   const dx = desiredTarget.x - current.x;
@@ -430,71 +445,18 @@ function buffEnderstorm(storm) {
   const state = getStormState(storm);
 
   if (state.phase === 1) {
-    storm.nameTag = "Quinn's Purple Enderstorm";
+    storm.nameTag = "Quinn's Giant Purple Enderstorm";
     storm.addEffect("resistance", 120, { amplifier: 1, showParticles: false });
     storm.addEffect("regeneration", 120, { amplifier: 1, showParticles: false });
     storm.addEffect("speed", 120, { amplifier: 1, showParticles: false });
     return;
   }
 
-  storm.nameTag = "Quinn's Ascended Enderstorm";
+  storm.nameTag = "Quinn's Ascended Giant Enderstorm";
   storm.addEffect("resistance", 120, { amplifier: 2, showParticles: false });
   storm.addEffect("regeneration", 120, { amplifier: 2, showParticles: false });
   storm.addEffect("speed", 120, { amplifier: 2, showParticles: false });
   storm.addEffect("strength", 120, { amplifier: 1, showParticles: false });
-}
-
-function getHeadCountForPhase(phase) {
-  return phase === 1 ? PHASE_ONE_HEADS : PHASE_TWO_HEADS;
-}
-
-function spawnStormHeads(storm) {
-  const state = getStormState(storm);
-  const existingHeads = getTaggedEntitiesNear(
-    storm.dimension,
-    ENDERESTORM_HEAD_TAG,
-    storm.location,
-    STORM_HELPER_RADIUS,
-  );
-  const desiredHeads = getHeadCountForPhase(state.phase);
-
-  for (let index = existingHeads.length; index < desiredHeads; index++) {
-    const angle = index * ((Math.PI * 2) / desiredHeads);
-    const head = storm.dimension.spawnEntity("minecraft:enderman", {
-      x: storm.location.x + Math.cos(angle) * (state.phase === 1 ? 8 : 16),
-      y: storm.location.y + 6 + index * 2,
-      z: storm.location.z + Math.sin(angle) * (state.phase === 1 ? 8 : 16),
-    });
-
-    head.nameTag = `Enderstorm Head ${index + 1}`;
-    head.addTag(ENDERESTORM_HEAD_TAG);
-    head.addTag(ENDERESTORM_HELPER_TAG);
-    head.addEffect("resistance", 120, { amplifier: 1, showParticles: false });
-    head.addEffect("speed", 120, { amplifier: 1, showParticles: false });
-  }
-}
-
-function updateStormHeads(storm) {
-  const state = getStormState(storm);
-  const desiredHeads = getHeadCountForPhase(state.phase);
-  const heads = getTaggedEntitiesNear(
-    storm.dimension,
-    ENDERESTORM_HEAD_TAG,
-    storm.location,
-    STORM_HELPER_RADIUS,
-  ).slice(0, desiredHeads);
-
-  const baseAngle = system.currentTick / (state.phase === 1 ? 14 : 10);
-
-  heads.forEach((head, index) => {
-    const angle = baseAngle + index * ((Math.PI * 2) / Math.max(1, desiredHeads));
-    const radius = (state.phase === 1 ? 8 : 16) + index * (state.phase === 1 ? 1.2 : 1.8);
-    head.teleport({
-      x: storm.location.x + Math.cos(angle) * radius,
-      y: storm.location.y + 6 + index * (state.phase === 1 ? 2 : 3),
-      z: storm.location.z + Math.sin(angle) * radius,
-    });
-  });
 }
 
 function summonEndermiteWave(storm) {
@@ -510,7 +472,7 @@ function summonEndermiteWave(storm) {
     storm.dimension,
     ENDERESTORM_MINION_TAG,
     storm.location,
-    STORM_HELPER_RADIUS,
+    STORM_MINION_RADIUS,
   );
   const mitesToSpawn = Math.max(1, Math.min(state.phase === 1 ? 3 : 5, MAX_ENDERMITES - nearbyMites.length));
 
@@ -524,7 +486,6 @@ function summonEndermiteWave(storm) {
 
     mite.nameTag = "Enderstorm Tentacle";
     mite.addTag(ENDERESTORM_MINION_TAG);
-    mite.addTag(ENDERESTORM_HELPER_TAG);
     mite.addEffect("speed", 60, { amplifier: state.phase === 1 ? 1 : 2, showParticles: false });
     mite.addEffect("strength", 60, { amplifier: state.phase === 1 ? 0 : 1, showParticles: false });
   }
@@ -591,8 +552,8 @@ function startPhaseTwo(storm) {
   state.maxVirtualHealth = PHASE_TWO_VIRTUAL_HEALTH;
   state.virtualHealth = PHASE_TWO_VIRTUAL_HEALTH;
   state.lastEndermiteTick = 0;
-  state.lastTentacleTick = 0;
   state.lastHelperVolleyTick = 0;
+  state.lastTentacleTick = 0;
   state.lastLightningTick = 0;
 
   if (health) {
@@ -617,9 +578,9 @@ function startPhaseTwo(storm) {
 function spawnHelperArcher(storm, index) {
   const angle = index * ((Math.PI * 2) / TARGET_RAID_SIZE);
   const archer = storm.dimension.spawnEntity("minecraft:wandering_trader", {
-    x: storm.location.x + Math.cos(angle) * (ARENA_RADIUS - 3),
-    y: storm.location.y - 8,
-    z: storm.location.z + Math.sin(angle) * (ARENA_RADIUS - 3),
+    x: storm.location.x + Math.cos(angle) * (ARENA_RADIUS - 4),
+    y: storm.location.y - 18,
+    z: storm.location.z + Math.sin(angle) * (ARENA_RADIUS - 4),
   });
 
   archer.nameTag = `Diamond Archer NPC ${index + 1}`;
@@ -637,13 +598,13 @@ function ensureHelperArchers(storm) {
     storm.dimension,
     ENDERESTORM_ARCHER_TAG,
     storm.location,
-    STORM_HELPER_RADIUS,
+    STORM_MINION_RADIUS,
   );
 
   while (archers.length < desiredHelpers) {
     spawnHelperArcher(storm, archers.length);
     archers.push(
-      ...getTaggedEntitiesNear(storm.dimension, ENDERESTORM_ARCHER_TAG, storm.location, STORM_HELPER_RADIUS).slice(
+      ...getTaggedEntitiesNear(storm.dimension, ENDERESTORM_ARCHER_TAG, storm.location, STORM_MINION_RADIUS).slice(
         archers.length,
       ),
     );
@@ -660,9 +621,9 @@ function ensureHelperArchers(storm) {
   archers.forEach((archer, index) => {
     const angle = (system.currentTick / 40) + index * ((Math.PI * 2) / Math.max(1, desiredHelpers));
     archer.teleport({
-      x: storm.location.x + Math.cos(angle) * (ARENA_RADIUS - 3),
-      y: storm.location.y - 8,
-      z: storm.location.z + Math.sin(angle) * (ARENA_RADIUS - 3),
+      x: storm.location.x + Math.cos(angle) * (ARENA_RADIUS - 4),
+      y: storm.location.y - 18,
+      z: storm.location.z + Math.sin(angle) * (ARENA_RADIUS - 4),
     });
     archer.addEffect("resistance", 20, { amplifier: 4, showParticles: false });
   });
@@ -689,9 +650,19 @@ function fireHelperVolleys(storm, helperCount) {
   }
 }
 
+function cleanupStormMinions(location, dimension) {
+  for (const minion of dimension.getEntities({ tags: [ENDERESTORM_MINION_TAG] })) {
+    if (horizontalDistance(minion.location, location) > STORM_MINION_RADIUS + 24) {
+      continue;
+    }
+
+    minion.kill();
+  }
+}
+
 function cleanupStormHelpers(location, dimension) {
   for (const helper of dimension.getEntities({ tags: [ENDERESTORM_HELPER_TAG] })) {
-    if (horizontalDistance(helper.location, location) > STORM_HELPER_RADIUS + 24) {
+    if (horizontalDistance(helper.location, location) > STORM_MINION_RADIUS + 24) {
       continue;
     }
 
@@ -703,8 +674,6 @@ function updateStormBattle(storm) {
   buffEnderstorm(storm);
   syncStormHealth(storm);
   moveStormWithinArena(storm);
-  spawnStormHeads(storm);
-  updateStormHeads(storm);
   summonEndermiteWave(storm);
   strikePlayersWithTentacles(storm);
   triggerPhaseTwoLightning(storm);
@@ -713,7 +682,7 @@ function updateStormBattle(storm) {
 }
 
 function spawnEnderstorm(player, spawnLocation) {
-  flattenBattleArena(player, spawnLocation);
+  earthquakeFlattenArena(player, spawnLocation);
   setBattleSkyForNearbyPlayers(spawnLocation, player.dimension);
 
   const existingStorm = getNearestStorm(player);
@@ -722,11 +691,11 @@ function spawnEnderstorm(player, spawnLocation) {
     updateStormBattle(existingStorm);
     player.addTag(ENDERESTORM_SUMMONED_TAG);
     player.removeTag(FORCE_ENDERSTORM_TAG);
-    player.sendMessage("Quinn's Purple Enderstorm is already raging nearby.");
+    player.sendMessage("Quinn's Giant Purple Enderstorm is already raging nearby.");
     return existingStorm;
   }
 
-  const storm = player.dimension.spawnEntity("minecraft:wither", {
+  const storm = player.dimension.spawnEntity("minecraft:ghast", {
     x: spawnLocation.x,
     y: spawnLocation.y + 18,
     z: spawnLocation.z,
@@ -739,8 +708,8 @@ function spawnEnderstorm(player, spawnLocation) {
 
   player.addTag(ENDERESTORM_SUMMONED_TAG);
   player.removeTag(FORCE_ENDERSTORM_TAG);
-  player.sendMessage("The purple tornado opens above the altar. Quinn's Enderstorm has awakened!");
-  runPlayerCommand(player, "playsound mob.wither.spawn @s");
+  player.sendMessage("The ground cracks, the earthquake flattens the land, and Quinn's Enderstorm rises from the storm!");
+  runPlayerCommand(player, "playsound mob.ghast.scream @s");
 
   return storm;
 }
@@ -920,7 +889,7 @@ function onTreasureReached(player) {
 
   grantPreFightLoadout(player);
   spawnEnderstorm(player, target);
-  player.sendMessage("If fewer than five players arrive, Diamond Archer NPCs will join the raid.");
+  player.sendMessage("The earthquake has started. If fewer than five raiders arrive, Diamond Archer NPCs will help shoot the boss.");
 }
 
 function updateTreasureHunt(player) {
@@ -942,6 +911,7 @@ function updateTreasureHunt(player) {
     if (!storm) {
       player.removeTag(ENDERESTORM_SUMMONED_TAG);
       clearBattleSkyForNearbyPlayers(player.location, player.dimension);
+      cleanupStormMinions(player.location, player.dimension);
       cleanupStormHelpers(player.location, player.dimension);
       player.sendMessage("Quinn's Enderstorm slipped away. Reach the altar or summon it again.");
       return;
@@ -952,16 +922,12 @@ function updateTreasureHunt(player) {
 
     const state = getStormState(storm);
     const raidPlayers = getRaidPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension).length;
-    const archers = getTaggedEntitiesNear(
-      storm.dimension,
-      ENDERESTORM_ARCHER_TAG,
-      storm.location,
-      STORM_HELPER_RADIUS,
-    ).length;
+    const endermites = getTaggedEntitiesNear(storm.dimension, ENDERESTORM_MINION_TAG, storm.location, STORM_MINION_RADIUS).length;
+    const helpers = getTaggedEntitiesNear(storm.dimension, ENDERESTORM_ARCHER_TAG, storm.location, STORM_MINION_RADIUS).length;
     const stormPercent = Math.max(1, Math.ceil((state.virtualHealth / state.maxVirtualHealth) * 100));
 
     player.onScreenDisplay.setActionBar(
-      `Phase ${state.phase} Enderstorm: ${stormPercent}% | Raiders ${raidPlayers} | NPC Archers ${archers}`,
+      `Phase ${state.phase} Enderstorm: ${stormPercent}% | Raiders ${raidPlayers} | NPCs ${helpers} | Endermites ${endermites}`,
     );
     return;
   }
@@ -995,6 +961,7 @@ world.afterEvents.entityDie.subscribe((event) => {
 
   stormBattleState.delete(storm.id);
   clearBattleSkyForNearbyPlayers(storm.location, storm.dimension);
+  cleanupStormMinions(storm.location, storm.dimension);
   cleanupStormHelpers(storm.location, storm.dimension);
 
   for (const player of world.getAllPlayers()) {

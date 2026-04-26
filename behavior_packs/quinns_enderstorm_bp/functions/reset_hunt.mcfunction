@@ -9,4 +9,5 @@ tag @s remove quinn_prep_loadout
 tag @s remove quinn_pickaxe_rewarded
 fog @s remove quinns_enderstorm_battle
 kill @e[tag=quinn_enderstorm,r=160]
+kill @e[tag=quinn_enderstorm_minion,r=160]
 kill @e[tag=quinn_enderstorm_helper,r=160]
