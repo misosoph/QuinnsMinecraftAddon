@@ -15,9 +15,13 @@ const TREASURE_RADIUS = 5;
 const ARENA_RADIUS = 22;
 const ARENA_CLEAR_HEIGHT = 18;
 const STORM_SUPPORT_RADIUS = 96;
-const STORM_HELPER_RADIUS = 48;
-const ENDERMITE_SUMMON_INTERVAL = 160;
-const MAX_ENDERMITES = 8;
+const STORM_HELPER_RADIUS = 54;
+const ENDERMITE_SUMMON_INTERVAL = 140;
+const HELPER_VOLLEY_INTERVAL = 40;
+const TENTACLE_STRIKE_INTERVAL = 90;
+const MAX_ENDERMITES = 10;
+const TARGET_RAID_SIZE = 5;
+const STORM_MAX_VIRTUAL_HEALTH = 2200;
 const FORCE_ENDERSTORM_TAG = "quinn_force_enderstorm";
 const ENDERESTORM_ENTITY_TAG = "quinn_enderstorm";
 const ENDERESTORM_SUMMONED_TAG = "quinn_enderstorm_summoned";
@@ -25,6 +29,7 @@ const ENDERESTORM_DEFEATED_TAG = "quinn_enderstorm_defeated";
 const ENDERESTORM_HEAD_TAG = "quinn_enderstorm_head";
 const ENDERESTORM_MINION_TAG = "quinn_enderstorm_minion";
 const ENDERESTORM_HELPER_TAG = "quinn_enderstorm_helper";
+const ENDERESTORM_ARCHER_TAG = "quinn_enderstorm_archer";
 const PREP_LOADOUT_TAG = "quinn_prep_loadout";
 const PICKAXE_REWARD_TAG = "quinn_pickaxe_rewarded";
 const BATTLE_FOG_ID = "quinns_enderstorm:battle_sky";
@@ -40,8 +45,8 @@ function announcePlayer(player) {
   }
 
   seenPlayers.add(player.id);
-  player.sendMessage("Quinn's Enderstorm has changed.");
-  player.sendMessage("Find the altar, claim the storm gear, and survive the five-minute boss fight.");
+  player.sendMessage("Quinn's Enderstorm raid has changed.");
+  player.sendMessage("Find the altar, claim the raid gear, and survive a five-player purple storm battle.");
   player.sendMessage("Quick test: /function summon_enderstorm");
 }
 
@@ -126,6 +131,10 @@ function getNearbyPlayers(location, radius, dimension) {
   }
 
   return nearbyPlayers;
+}
+
+function getRaidPlayers(location, radius, dimension) {
+  return getNearbyPlayers(location, radius, dimension).filter((player) => !hasTag(player, ENDERESTORM_DEFEATED_TAG));
 }
 
 function getInventoryContainer(player) {
@@ -267,14 +276,69 @@ function getTaggedEntitiesNear(dimension, tag, location, radius) {
   return nearby;
 }
 
+function getStormHealth(storm) {
+  return storm.getComponent(EntityComponentTypes.Health);
+}
+
 function getStormState(storm) {
   if (!stormBattleState.has(storm.id)) {
+    const health = getStormHealth(storm);
+    const visibleHealth = health ? health.effectiveMax : 300;
+
     stormBattleState.set(storm.id, {
       lastEndermiteTick: 0,
+      lastHelperVolleyTick: 0,
+      lastTentacleTick: 0,
+      maxVirtualHealth: STORM_MAX_VIRTUAL_HEALTH,
+      virtualHealth: STORM_MAX_VIRTUAL_HEALTH,
+      lastVisibleHealth: visibleHealth,
     });
   }
 
   return stormBattleState.get(storm.id);
+}
+
+function initializeStormHealth(storm) {
+  const health = getStormHealth(storm);
+
+  if (!health) {
+    return;
+  }
+
+  health.resetToMaxValue();
+  const state = getStormState(storm);
+  state.lastVisibleHealth = health.currentValue;
+}
+
+function syncStormHealth(storm) {
+  const health = getStormHealth(storm);
+
+  if (!health) {
+    return;
+  }
+
+  const state = getStormState(storm);
+  const visibleDamage = Math.max(0, state.lastVisibleHealth - health.currentValue);
+
+  if (visibleDamage > 0) {
+    state.virtualHealth = Math.max(0, state.virtualHealth - visibleDamage);
+  }
+
+  if (state.virtualHealth <= 0) {
+    storm.kill();
+    return;
+  }
+
+  const desiredVisibleHealth = Math.max(
+    1,
+    Math.ceil((state.virtualHealth / state.maxVirtualHealth) * health.effectiveMax),
+  );
+
+  if (Math.ceil(health.currentValue) !== desiredVisibleHealth) {
+    health.setCurrentValue(desiredVisibleHealth);
+  }
+
+  state.lastVisibleHealth = desiredVisibleHealth;
 }
 
 function buffEnderstorm(storm) {
@@ -295,15 +359,15 @@ function spawnStormHeads(storm) {
   for (let index = existingHeads.length; index < 3; index++) {
     const angle = index * ((Math.PI * 2) / 3);
     const head = storm.dimension.spawnEntity("minecraft:enderman", {
-      x: storm.location.x + Math.cos(angle) * 4,
+      x: storm.location.x + Math.cos(angle) * 5,
       y: storm.location.y + 3 + index,
-      z: storm.location.z + Math.sin(angle) * 4,
+      z: storm.location.z + Math.sin(angle) * 5,
     });
 
     head.nameTag = `Enderstorm Head ${index + 1}`;
     head.addTag(ENDERESTORM_HEAD_TAG);
     head.addTag(ENDERESTORM_HELPER_TAG);
-    head.addEffect("resistance", 120, { amplifier: 0, showParticles: false });
+    head.addEffect("resistance", 120, { amplifier: 1, showParticles: false });
     head.addEffect("speed", 120, { amplifier: 1, showParticles: false });
   }
 }
@@ -320,15 +384,12 @@ function updateStormHeads(storm) {
 
   heads.forEach((head, index) => {
     const angle = baseAngle + index * ((Math.PI * 2) / 3);
-    const radius = 4 + index * 1.5;
-    const targetLocation = {
+    const radius = 5 + index * 1.5;
+    head.teleport({
       x: storm.location.x + Math.cos(angle) * radius,
       y: storm.location.y + 3 + index * 2,
       z: storm.location.z + Math.sin(angle) * radius,
-    };
-
-    head.teleport(targetLocation);
-    head.addEffect("resistance", 5, { amplifier: 0, showParticles: false });
+    });
   });
 }
 
@@ -350,24 +411,113 @@ function summonEndermiteWave(storm) {
   const mitesToSpawn = Math.max(1, Math.min(3, MAX_ENDERMITES - nearbyMites.length));
 
   for (let index = 0; index < mitesToSpawn; index++) {
-    const angle = (system.currentTick / 8) + index * ((Math.PI * 2) / 3);
+    const angle = (system.currentTick / 9) + index * ((Math.PI * 2) / 3);
     const mite = storm.dimension.spawnEntity("minecraft:endermite", {
-      x: storm.location.x + Math.cos(angle) * 6,
-      y: storm.location.y - 6,
-      z: storm.location.z + Math.sin(angle) * 6,
+      x: storm.location.x + Math.cos(angle) * 7,
+      y: storm.location.y - 7,
+      z: storm.location.z + Math.sin(angle) * 7,
     });
 
     mite.nameTag = "Enderstorm Tentacle";
     mite.addTag(ENDERESTORM_MINION_TAG);
     mite.addTag(ENDERESTORM_HELPER_TAG);
-    mite.addEffect("speed", 20, { amplifier: 1, showParticles: false });
+    mite.addEffect("speed", 60, { amplifier: 1, showParticles: false });
+    mite.addEffect("strength", 60, { amplifier: 0, showParticles: false });
   }
 }
 
-function supportPlayersInBattle(storm) {
-  for (const player of getNearbyPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension)) {
-    runPlayerCommand(player, "effect @s regeneration 3 1 true");
-    runPlayerCommand(player, "effect @s resistance 3 0 true");
+function strikePlayersWithTentacles(storm) {
+  const state = getStormState(storm);
+
+  if (system.currentTick - state.lastTentacleTick < TENTACLE_STRIKE_INTERVAL) {
+    return;
+  }
+
+  state.lastTentacleTick = system.currentTick;
+
+  const raiders = getRaidPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension).slice(0, 3);
+
+  for (const player of raiders) {
+    if (horizontalDistance(player.location, storm.location) < 10) {
+      player.applyDamage(6);
+      runPlayerCommand(player, "effect @s slowness 2 1 true");
+      player.sendMessage("A purple tentacle slams into you.");
+    }
+  }
+}
+
+function spawnHelperArcher(storm, index) {
+  const angle = index * ((Math.PI * 2) / TARGET_RAID_SIZE);
+  const archer = storm.dimension.spawnEntity("minecraft:wandering_trader", {
+    x: storm.location.x + Math.cos(angle) * (ARENA_RADIUS - 3),
+    y: storm.location.y - 8,
+    z: storm.location.z + Math.sin(angle) * (ARENA_RADIUS - 3),
+  });
+
+  archer.nameTag = `Diamond Archer NPC ${index + 1}`;
+  archer.addTag(ENDERESTORM_HELPER_TAG);
+  archer.addTag(ENDERESTORM_ARCHER_TAG);
+  archer.addEffect("resistance", 120, { amplifier: 4, showParticles: false });
+  archer.addEffect("fire_resistance", 120, { amplifier: 0, showParticles: false });
+  archer.addEffect("speed", 120, { amplifier: 0, showParticles: false });
+}
+
+function ensureHelperArchers(storm) {
+  const raiders = getRaidPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension);
+  const desiredHelpers = Math.max(0, TARGET_RAID_SIZE - raiders.length);
+  const archers = getTaggedEntitiesNear(
+    storm.dimension,
+    ENDERESTORM_ARCHER_TAG,
+    storm.location,
+    STORM_HELPER_RADIUS,
+  );
+
+  while (archers.length < desiredHelpers) {
+    spawnHelperArcher(storm, archers.length);
+    archers.push(
+      ...getTaggedEntitiesNear(storm.dimension, ENDERESTORM_ARCHER_TAG, storm.location, STORM_HELPER_RADIUS).slice(
+        archers.length,
+      ),
+    );
+  }
+
+  while (archers.length > desiredHelpers) {
+    const extra = archers.pop();
+
+    if (extra) {
+      extra.kill();
+    }
+  }
+
+  archers.forEach((archer, index) => {
+    const angle = (system.currentTick / 40) + index * ((Math.PI * 2) / Math.max(1, desiredHelpers));
+    archer.teleport({
+      x: storm.location.x + Math.cos(angle) * (ARENA_RADIUS - 3),
+      y: storm.location.y - 8,
+      z: storm.location.z + Math.sin(angle) * (ARENA_RADIUS - 3),
+    });
+    archer.addEffect("resistance", 20, { amplifier: 4, showParticles: false });
+  });
+
+  return archers.length;
+}
+
+function fireHelperVolleys(storm, helperCount) {
+  const state = getStormState(storm);
+
+  if (helperCount <= 0) {
+    return;
+  }
+
+  if (system.currentTick - state.lastHelperVolleyTick < HELPER_VOLLEY_INTERVAL) {
+    return;
+  }
+
+  state.lastHelperVolleyTick = system.currentTick;
+  state.virtualHealth = Math.max(0, state.virtualHealth - helperCount * 3);
+
+  for (const player of getRaidPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension)) {
+    runPlayerCommand(player, "playsound random.bow @s");
   }
 }
 
@@ -383,10 +533,13 @@ function cleanupStormHelpers(location, dimension) {
 
 function updateStormBattle(storm) {
   buffEnderstorm(storm);
+  syncStormHealth(storm);
   spawnStormHeads(storm);
   updateStormHeads(storm);
   summonEndermiteWave(storm);
-  supportPlayersInBattle(storm);
+  strikePlayersWithTentacles(storm);
+  const helperCount = ensureHelperArchers(storm);
+  fireHelperVolleys(storm, helperCount);
 }
 
 function spawnEnderstorm(player, spawnLocation) {
@@ -410,6 +563,7 @@ function spawnEnderstorm(player, spawnLocation) {
   });
 
   storm.addTag(ENDERESTORM_ENTITY_TAG);
+  initializeStormHealth(storm);
   updateStormBattle(storm);
 
   player.addTag(ENDERESTORM_SUMMONED_TAG);
@@ -461,9 +615,9 @@ function createEnchantedItem(typeId, nameTag, lore, enchantments, amount = 1) {
 
 function createArrowStack() {
   const arrows = new ItemStack("minecraft:arrow", 64);
-  arrows.nameTag = "Quinn's Enderstorm Arrows";
+  arrows.nameTag = "Quinn's Diamond Arrows";
   arrows.keepOnDeath = true;
-  arrows.setLore(["Made to tear through the purple storm."]);
+  arrows.setLore(["A custom storm quiver built to hit the purple core."]);
   return arrows;
 }
 
@@ -561,10 +715,10 @@ function grantPreFightLoadout(player) {
   placeHotbarItem(player, 1, loadout.bow);
   placeHotbarItem(player, 2, loadout.arrows);
 
-  runPlayerCommand(player, "effect @s strength 120 1 true");
-  runPlayerCommand(player, "effect @s resistance 120 0 true");
+  runPlayerCommand(player, "effect @s strength 90 1 true");
+  runPlayerCommand(player, "effect @s resistance 90 0 true");
   runPlayerCommand(player, "playsound random.totem @s");
-  player.sendMessage("The altar equips you with enchanted diamond armor, Quinn's Stormblade, and the Enderstorm Bow.");
+  player.sendMessage("The altar equips you with enchanted diamond armor, Quinn's Stormblade, the Enderstorm Bow, and Diamond Arrows.");
   player.sendMessage("Sword, bow, and arrows are placed in your hotbar before the fight starts.");
 }
 
@@ -595,7 +749,7 @@ function onTreasureReached(player) {
 
   grantPreFightLoadout(player);
   spawnEnderstorm(player, target);
-  player.sendMessage("The altar loadout is yours. Two players can bring the Enderstorm down if they stay on it.");
+  player.sendMessage("If fewer than five players arrive, Diamond Archer NPCs will join the raid.");
 }
 
 function updateTreasureHunt(player) {
@@ -625,11 +779,19 @@ function updateTreasureHunt(player) {
     updateStormBattle(storm);
     applyBattleSky(player);
 
-    const distance = Math.ceil(horizontalDistance(player.location, storm.location));
-    const health = storm.getComponent(EntityComponentTypes.Health);
-    const healthText = health ? Math.ceil(health.currentValue) : "?";
+    const state = getStormState(storm);
+    const raidPlayers = getRaidPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension).length;
+    const archers = getTaggedEntitiesNear(
+      storm.dimension,
+      ENDERESTORM_ARCHER_TAG,
+      storm.location,
+      STORM_HELPER_RADIUS,
+    ).length;
+    const stormPercent = Math.max(1, Math.ceil((state.virtualHealth / state.maxVirtualHealth) * 100));
 
-    player.onScreenDisplay.setActionBar(`Purple Enderstorm: ${distance} blocks away | HP ${healthText}`);
+    player.onScreenDisplay.setActionBar(
+      `Purple Enderstorm: ${stormPercent}% | Raiders ${raidPlayers} | NPC Archers ${archers}`,
+    );
     return;
   }
 
