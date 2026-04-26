@@ -14,14 +14,14 @@ const stormBattleState = new Map();
 const TREASURE_RADIUS = 5;
 const ARENA_RADIUS = 36;
 const ARENA_CLEAR_HEIGHT = 44;
-const STORM_SUPPORT_RADIUS = 140;
-const STORM_MINION_RADIUS = 96;
-const ENDERMITE_SUMMON_INTERVAL = 120;
-const HELPER_VOLLEY_INTERVAL = 40;
+const STORM_SUPPORT_RADIUS = 110;
+const STORM_MINION_RADIUS = 72;
+const ENDERMITE_SUMMON_INTERVAL = 180;
+const HELPER_VOLLEY_INTERVAL = 60;
 const PHASE_ONE_TENTACLE_STRIKE_INTERVAL = 80;
 const PHASE_TWO_TENTACLE_STRIKE_INTERVAL = 45;
-const PHASE_TWO_LIGHTNING_INTERVAL = 30;
-const MAX_ENDERMITES = 16;
+const PHASE_TWO_LIGHTNING_INTERVAL = 60;
+const MAX_ENDERMITES = 8;
 const PHASE_ONE_VIRTUAL_HEALTH = 7000;
 const PHASE_TWO_VIRTUAL_HEALTH = 12000;
 const TARGET_RAID_SIZE = 5;
@@ -35,6 +35,7 @@ const ENDERESTORM_HELPER_TAG = "quinn_enderstorm_helper";
 const ENDERESTORM_ARCHER_TAG = "quinn_enderstorm_archer";
 const PREP_LOADOUT_TAG = "quinn_prep_loadout";
 const PICKAXE_REWARD_TAG = "quinn_pickaxe_rewarded";
+const BATTLE_SKY_TAG = "quinn_battle_sky";
 const BATTLE_FOG_ID = "quinns_enderstorm:battle_sky";
 const BATTLE_FOG_STACK_ID = "quinns_enderstorm_battle";
 
@@ -208,11 +209,21 @@ function equipArmorItem(player, slot, item) {
 }
 
 function applyBattleSky(player) {
+  if (hasTag(player, BATTLE_SKY_TAG)) {
+    return;
+  }
+
+  player.addTag(BATTLE_SKY_TAG);
   runPlayerCommand(player, `fog @s remove ${BATTLE_FOG_STACK_ID}`);
   runPlayerCommand(player, `fog @s push ${BATTLE_FOG_ID} ${BATTLE_FOG_STACK_ID}`);
 }
 
 function clearBattleSky(player) {
+  if (!hasTag(player, BATTLE_SKY_TAG)) {
+    return;
+  }
+
+  player.removeTag(BATTLE_SKY_TAG);
   runPlayerCommand(player, `fog @s remove ${BATTLE_FOG_STACK_ID}`);
 }
 
@@ -389,14 +400,14 @@ function moveStormWithinArena(storm) {
   const raiders = getRaidPlayers(center, STORM_SUPPORT_RADIUS, storm.dimension);
 
   if (raiders.length === 0) {
-    const homeY = center.y + (state.phase === 1 ? 18 : 34);
+    const homeY = center.y + (state.phase === 1 ? 16 : 28);
     const current = storm.location;
     const dx = center.x - current.x;
     const dz = center.z - current.z;
     const distance = Math.sqrt(dx * dx + dz * dz);
 
     if (distance > 2 || Math.abs(current.y - homeY) > 3) {
-      const step = Math.min(1.4, distance || 0);
+      const step = Math.min(0.8, distance || 0);
       storm.teleport({
         x: distance > 0 ? current.x + (dx / distance) * step : center.x,
         y: current.y + Math.sign(homeY - current.y) * Math.min(1.2, Math.abs(homeY - current.y)),
@@ -419,13 +430,13 @@ function moveStormWithinArena(storm) {
     }
   }
 
-  const desiredY = center.y + (state.phase === 1 ? 18 : 34);
+  const desiredY = center.y + (state.phase === 1 ? 16 : 28);
   const desiredTarget = clampLocationToArena(targetPlayer.location, center, ARENA_RADIUS - 4);
   const current = storm.location;
   const dx = desiredTarget.x - current.x;
   const dz = desiredTarget.z - current.z;
   const distance = Math.sqrt(dx * dx + dz * dz);
-  const maxStep = state.phase === 1 ? 1.1 : 1.5;
+  const maxStep = state.phase === 1 ? 0.8 : 1.0;
   const step = Math.min(maxStep, distance || 0);
   const nextX = distance > 0 ? current.x + (dx / distance) * step : current.x;
   const nextZ = distance > 0 ? current.z + (dz / distance) * step : current.z;
@@ -475,7 +486,7 @@ function summonEndermiteWave(storm) {
     storm.location,
     STORM_MINION_RADIUS,
   );
-  const mitesToSpawn = Math.max(1, Math.min(state.phase === 1 ? 3 : 5, MAX_ENDERMITES - nearbyMites.length));
+  const mitesToSpawn = Math.max(1, Math.min(state.phase === 1 ? 2 : 3, MAX_ENDERMITES - nearbyMites.length));
 
   for (let index = 0; index < mitesToSpawn; index++) {
     const angle = (system.currentTick / 9) + index * ((Math.PI * 2) / 3);
@@ -620,12 +631,17 @@ function ensureHelperArchers(storm) {
   }
 
   archers.forEach((archer, index) => {
-    const angle = (system.currentTick / 40) + index * ((Math.PI * 2) / Math.max(1, desiredHelpers));
-    archer.teleport({
+    const angle = index * ((Math.PI * 2) / Math.max(1, desiredHelpers));
+    const targetLocation = {
       x: storm.location.x + Math.cos(angle) * (ARENA_RADIUS - 4),
       y: storm.location.y - 18,
       z: storm.location.z + Math.sin(angle) * (ARENA_RADIUS - 4),
-    });
+    };
+
+    if (horizontalDistance(archer.location, targetLocation) > 6) {
+      archer.teleport(targetLocation);
+    }
+
     archer.addEffect("resistance", 20, { amplifier: 4, showParticles: false });
   });
 
@@ -646,9 +662,6 @@ function fireHelperVolleys(storm, helperCount) {
   state.lastHelperVolleyTick = system.currentTick;
   state.virtualHealth = Math.max(0, state.virtualHealth - helperCount * (state.phase === 1 ? 2 : 3));
 
-  for (const player of getRaidPlayers(storm.location, STORM_SUPPORT_RADIUS, storm.dimension)) {
-    runPlayerCommand(player, "playsound random.bow @s");
-  }
 }
 
 function cleanupStormMinions(location, dimension) {

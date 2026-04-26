@@ -7,6 +7,7 @@ tag @s remove quinn_enderstorm_minion
 tag @s remove quinn_enderstorm_helper
 tag @s remove quinn_prep_loadout
 tag @s remove quinn_pickaxe_rewarded
+tag @s remove quinn_battle_sky
 fog @s remove quinns_enderstorm_battle
 kill @e[tag=quinn_enderstorm,r=160]
 kill @e[tag=quinn_enderstorm_minion,r=160]

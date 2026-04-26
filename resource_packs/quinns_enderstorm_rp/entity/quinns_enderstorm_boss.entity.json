@@ -4,7 +4,7 @@
     "description": {
       "identifier": "quinns_enderstorm:boss",
       "materials": {
-        "default": "entity_emissive_alpha"
+        "default": "entity_alphatest"
       },
       "textures": {
         "default": "textures/entity/quinns_enderstorm_boss"
