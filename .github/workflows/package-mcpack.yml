@@ -22,5 +22,5 @@ jobs:
       - name: Upload add-on artifact
         uses: actions/upload-artifact@v4
         with:
-          name: quinns-enderstorm-addon
-          path: dist/quinns-enderstorm.mcaddon
+          name: quinns-minecraft-addons
+          path: dist/*.mcaddon

@@ -1,0 +1,9 @@
+{
+  "resource_pack_name": "quinns_security_rp",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "quinns_security_huge_key": {
+      "textures": "textures/items/gold_ingot"
+    }
+  }
+}

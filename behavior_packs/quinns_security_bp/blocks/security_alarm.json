@@ -1,0 +1,27 @@
+{
+  "format_version": "1.21.0",
+  "minecraft:block": {
+    "description": {
+      "identifier": "quinns_security:security_alarm",
+      "menu_category": {
+        "category": "items",
+        "group": "itemGroup.name.redstone"
+      }
+    },
+    "components": {
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 0.8
+      },
+      "minecraft:destructible_by_explosion": {
+        "explosion_resistance": 4.0
+      },
+      "minecraft:map_color": "#9d1010",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "quinns_security_alarm",
+          "render_method": "opaque"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "resource_pack_name": "quinns_security_rp",
+  "texture_name": "atlas.terrain",
+  "padding": 8,
+  "num_mip_levels": 4,
+  "texture_data": {
+    "quinns_security_tv": {
+      "textures": "textures/blocks/black_concrete"
+    },
+    "quinns_security_camera": {
+      "textures": "textures/blocks/observer_front"
+    },
+    "quinns_security_alarm": {
+      "textures": "textures/blocks/redstone_lamp_on"
+    },
+    "quinns_security_laser_emitter": {
+      "textures": "textures/blocks/redstone_block"
+    },
+    "quinns_security_locked_door": {
+      "textures": "textures/blocks/iron_block"
+    }
+  }
+}

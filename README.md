@@ -1,9 +1,13 @@
-# Quinn's Enderstorm
+# Quinn's Minecraft Add-ons
+
+Minecraft Bedrock add-ons for Quinn's worlds.
+
+## Add-ons
+
+### Quinn's Enderstorm
 
 A Minecraft Bedrock add-on built around Quinn's Enderstorm boss fight.
 A companion resource pack adds the dark red battle sky during the Enderstorm fight.
-
-## What It Does
 
 - Starts Quinn's Treasure Hunt when a player joins.
 - Picks a nearby altar target for each player.
@@ -12,22 +16,46 @@ A companion resource pack adds the dark red battle sky during the Enderstorm fig
 - Rewards the winner with an overpowered Iron-Gold Stormbreaker pickaxe.
 - Adds test functions you can run with `/function hello`, `/function summon_enderstorm`, and `/function reset_hunt`.
 
+### Quinn's Security Add-On
+
+A starter Minecraft Bedrock add-on scaffold for security features.
+It includes a behavior pack, resource pack, custom security devices, and scripts.
+Run `/function security_kit` to get the test items:
+
+- Security TV: connect it to a camera by placing a security camera within 2 blocks, then interact with the TV to see what the camera detects.
+- Security Camera: detects mobs within 10 blocks and sends nearby alarms when it sees one.
+- Security Alarm: required for cameras and laser emitters to trigger alerts.
+- Laser Beam Emitter: works when an alarm is within 10 blocks. It damages mobs in straight laser lanes for 1 heart every second.
+- Locked Security Door: opens only when the player has the Huge Security Key.
+- Huge Security Key: the oversized key item used to unlock security doors.
+
 ## Files
 
 ```text
 QuinnsMinecraftAddon
 |-- behavior_packs
-|   `-- quinns_enderstorm_bp
+|   |-- quinns_enderstorm_bp
+|   |   |-- manifest.json
+|   |   |-- functions
+|   |   |   `-- hello.mcfunction
+|   |   `-- scripts
+|   |       `-- main.js
+|   `-- quinns_security_bp
 |       |-- manifest.json
-|       |-- functions
-|       |   `-- hello.mcfunction
-|       `-- scripts
-|           `-- main.js
+|       |-- blocks
+|       |-- items
+|       `-- functions
+|           |-- hello_security.mcfunction
+|           `-- security_kit.mcfunction
 |-- resource_packs
-|   `-- quinns_enderstorm_rp
+|   |-- quinns_enderstorm_rp
+|   |   |-- manifest.json
+|   |   `-- fogs
+|   |       `-- battle_sky.json
+|   `-- quinns_security_rp
 |       |-- manifest.json
-|       `-- fogs
-|           `-- battle_sky.json
+|       `-- texts
+|           `-- en_US.lang
 |-- scripts
 |   |-- build.ps1
 |   |-- install.ps1
@@ -54,7 +82,10 @@ packages. Later, this project can be upgraded to a full TypeScript compiler setu
 .\scripts\package.ps1
 ```
 
-This creates `dist/quinns-enderstorm.mcaddon`.
+This creates:
+
+- `dist/quinns-enderstorm.mcaddon`
+- `dist/quinns-security-addon.mcaddon`
 
 > Note: do not commit packaged binaries to pull requests if your PR workflow
 > rejects binary files. This repo ignores `dist/*.mcaddon` and publishes the
@@ -64,7 +95,7 @@ This creates `dist/quinns-enderstorm.mcaddon`.
 
 1. Open the **Actions** tab in GitHub.
 2. Run **Package Minecraft Add-on** (or open any recent run on your branch/PR).
-3. Download the **quinns-enderstorm-addon** artifact.
+3. Download the **quinns-minecraft-addons** artifact.
 4. Save it to Files on iPad and open it in Minecraft.
 
 ## Install For Local Testing
@@ -93,5 +124,9 @@ uses a custom location, pass it explicitly:
 9. The arena will flatten into bedrock and the sky will turn dark red for the fight.
 10. Defeat Quinn's Enderstorm to earn the Stormbreaker pickaxe.
 11. Run `/function reset_hunt` to reset the boss, battle sky, and reward tags for another test.
+
+For Quinn's Security Add-On, activate `Quinn's Security Add-On Resources`
+under Resource Packs and `Quinn's Security Add-On` under Behavior Packs, then
+run `/function security_kit`.
 
 If the pack does not load, enable the Content Log in `Settings > Creator`.

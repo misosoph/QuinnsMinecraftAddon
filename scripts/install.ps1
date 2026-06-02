@@ -6,18 +6,20 @@ param(
 $ErrorActionPreference = "Stop"
 
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
-$behaviorPackName = "quinns_enderstorm_bp"
-$resourcePackName = "quinns_enderstorm_rp"
-$behaviorPackSource = Join-Path $projectRoot "behavior_packs\$behaviorPackName"
-$resourcePackSource = Join-Path $projectRoot "resource_packs\$resourcePackName"
-
-if (-not (Test-Path (Join-Path $behaviorPackSource "manifest.json"))) {
-  throw "Behavior pack manifest not found: $behaviorPackSource"
-}
-
-if (-not (Test-Path (Join-Path $resourcePackSource "manifest.json"))) {
-  throw "Resource pack manifest not found: $resourcePackSource"
-}
+$addons = @(
+  @{
+    BehaviorPackName = "quinns_enderstorm_bp"
+    ResourcePackName = "quinns_enderstorm_rp"
+    BehaviorDisplayName = "Quinn's Enderstorm"
+    ResourceDisplayName = "Quinn's Enderstorm Resources"
+  },
+  @{
+    BehaviorPackName = "quinns_security_bp"
+    ResourcePackName = "quinns_security_rp"
+    BehaviorDisplayName = "Quinn's Security Add-On"
+    ResourceDisplayName = "Quinn's Security Add-On Resources"
+  }
+)
 
 & (Join-Path $PSScriptRoot "build.ps1")
 
@@ -38,17 +40,34 @@ if ([string]::IsNullOrWhiteSpace($MinecraftComMojangPath)) {
 
 $developmentPacks = Join-Path $MinecraftComMojangPath "development_behavior_packs"
 $developmentResources = Join-Path $MinecraftComMojangPath "development_resource_packs"
-$behaviorPackTarget = Join-Path $developmentPacks $behaviorPackName
-$resourcePackTarget = Join-Path $developmentResources $resourcePackName
 
-New-Item -ItemType Directory -Force -Path $behaviorPackTarget | Out-Null
-New-Item -ItemType Directory -Force -Path $resourcePackTarget | Out-Null
-Copy-Item -Path (Join-Path $behaviorPackSource "*") -Destination $behaviorPackTarget -Recurse -Force
-Copy-Item -Path (Join-Path $resourcePackSource "*") -Destination $resourcePackTarget -Recurse -Force
+foreach ($addon in $addons) {
+  $behaviorPackName = $addon.BehaviorPackName
+  $resourcePackName = $addon.ResourcePackName
+  $behaviorPackSource = Join-Path $projectRoot "behavior_packs\$behaviorPackName"
+  $resourcePackSource = Join-Path $projectRoot "resource_packs\$resourcePackName"
 
-Write-Host "Installed behavior pack:"
-Write-Host "  $behaviorPackTarget"
-Write-Host "Installed resource pack:"
-Write-Host "  $resourcePackTarget"
-Write-Host ""
-Write-Host "Activate 'Quinn''s Enderstorm Resources' under Resource Packs and 'Quinn''s Enderstorm' under Behavior Packs."
+  if (-not (Test-Path (Join-Path $behaviorPackSource "manifest.json"))) {
+    throw "Behavior pack manifest not found: $behaviorPackSource"
+  }
+
+  if (-not (Test-Path (Join-Path $resourcePackSource "manifest.json"))) {
+    throw "Resource pack manifest not found: $resourcePackSource"
+  }
+
+  $behaviorPackTarget = Join-Path $developmentPacks $behaviorPackName
+  $resourcePackTarget = Join-Path $developmentResources $resourcePackName
+
+  New-Item -ItemType Directory -Force -Path $behaviorPackTarget | Out-Null
+  New-Item -ItemType Directory -Force -Path $resourcePackTarget | Out-Null
+  Copy-Item -Path (Join-Path $behaviorPackSource "*") -Destination $behaviorPackTarget -Recurse -Force
+  Copy-Item -Path (Join-Path $resourcePackSource "*") -Destination $resourcePackTarget -Recurse -Force
+
+  Write-Host "Installed behavior pack:"
+  Write-Host "  $behaviorPackTarget"
+  Write-Host "Installed resource pack:"
+  Write-Host "  $resourcePackTarget"
+  Write-Host ""
+  Write-Host "Activate '$($addon.ResourceDisplayName)' under Resource Packs and '$($addon.BehaviorDisplayName)' under Behavior Packs."
+  Write-Host ""
+}

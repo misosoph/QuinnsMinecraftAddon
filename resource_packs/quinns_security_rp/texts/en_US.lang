@@ -1,0 +1,8 @@
+pack.name=Quinn's Security Add-On Resources
+pack.description=Resource pack scaffold for Quinn's Security Add-On.
+tile.quinns_security:security_tv.name=Security TV
+tile.quinns_security:security_camera.name=Security Camera
+tile.quinns_security:security_alarm.name=Security Alarm
+tile.quinns_security:laser_emitter.name=Laser Beam Emitter
+tile.quinns_security:locked_security_door.name=Locked Security Door
+item.quinns_security:huge_security_key.name=Huge Security Key
