@@ -15,6 +15,7 @@
       "minecraft:destructible_by_explosion": {
         "explosion_resistance": 4.0
       },
+      "minecraft:geometry": "geometry.quinns_security.security_camera",
       "minecraft:map_color": "#303030",
       "minecraft:material_instances": {
         "*": {

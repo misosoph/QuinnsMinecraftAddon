@@ -8,16 +8,16 @@
       "textures": "textures/blocks/black_concrete"
     },
     "quinns_security_camera": {
-      "textures": "textures/blocks/observer_front"
+      "textures": "textures/blocks/quinns_security_camera"
     },
     "quinns_security_alarm": {
       "textures": "textures/blocks/redstone_lamp_on"
     },
     "quinns_security_laser_emitter": {
-      "textures": "textures/blocks/redstone_block"
+      "textures": "textures/blocks/quinns_security_laser_emitter"
     },
     "quinns_security_locked_door": {
-      "textures": "textures/blocks/iron_block"
+      "textures": "textures/blocks/quinns_security_locked_door"
     }
   }
 }

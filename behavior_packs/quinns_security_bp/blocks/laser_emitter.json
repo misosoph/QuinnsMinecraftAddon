@@ -16,6 +16,7 @@
         "explosion_resistance": 5.0
       },
       "minecraft:light_emission": 8,
+      "minecraft:geometry": "geometry.quinns_security.laser_emitter",
       "minecraft:map_color": "#d02020",
       "minecraft:material_instances": {
         "*": {

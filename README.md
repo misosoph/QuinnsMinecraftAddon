@@ -23,11 +23,11 @@ It includes a behavior pack, resource pack, custom security devices, and scripts
 Run `/function security_kit` to get the test items:
 
 - Security TV: connect it to a camera by placing a security camera within 2 blocks, then interact with the TV to see what the camera detects.
-- Security Camera: detects mobs within 10 blocks and sends nearby alarms when it sees one.
+- Security Camera: a blocky security camera model that detects mobs within 10 blocks and sends nearby alarms when it sees one.
 - Security Alarm: required for cameras and laser emitters to trigger alerts.
-- Laser Beam Emitter: works when an alarm is within 10 blocks. It damages mobs in straight laser lanes for 1 heart every second.
-- Locked Security Door: opens only when the player has the Huge Security Key.
-- Huge Security Key: the oversized key item used to unlock security doors.
+- Laser Beam Emitter: a giant blocky iron-ingot-shaped emitter with trident-like prongs. It works when an alarm is within 10 blocks and damages mobs in straight laser lanes for 1 heart every second.
+- Locked Security Door: a locked trapdoor-style block with a key shape in the face. It opens only when the player has the Huge Security Key.
+- Huge Security Key: an oversized golden key item used to unlock security doors.
 
 ## Files
 

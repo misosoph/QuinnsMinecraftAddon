@@ -15,6 +15,7 @@
       "minecraft:destructible_by_explosion": {
         "explosion_resistance": 1200.0
       },
+      "minecraft:geometry": "geometry.quinns_security.locked_security_door",
       "minecraft:map_color": "#4a4a4a",
       "minecraft:material_instances": {
         "*": {
