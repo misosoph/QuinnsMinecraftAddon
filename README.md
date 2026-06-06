@@ -95,8 +95,9 @@ This creates:
 
 1. Open the **Actions** tab in GitHub.
 2. Run **Package Minecraft Add-on** (or open any recent run on your branch/PR).
-3. Download the **quinns-minecraft-addons** artifact.
-4. Save it to Files on iPad and open it in Minecraft.
+3. Download the **quinns-security-addon** artifact.
+4. Extract the downloaded GitHub artifact ZIP.
+5. Open `quinns-security-addon.mcaddon` from the extracted folder in Minecraft.
 
 ## Install For Local Testing
 
@@ -131,10 +132,14 @@ run `/function security_kit`.
 
 ### Updating Quinn's Security Add-On
 
-The current security pack version is `1.1.1`. Before importing an older build
+The current security pack version is `1.1.2`. Before importing an older build
 again, remove both `Quinn's Security Add-On` and
 `Quinn's Security Add-On Resources` from Minecraft storage. Minecraft uses the
 manifest UUID and version to decide whether an imported pack replaces the
 installed copy.
+
+The generated `.mcaddon` contains separate behavior and resource `.mcpack`
+archives. Each inner pack has its `manifest.json` at the archive root, which is
+the layout required for Minecraft to import both packs.
 
 If the pack does not load, enable the Content Log in `Settings > Creator`.

@@ -32,6 +32,10 @@ foreach ($addon in $addons) {
   $stagingRoot = Join-Path $dist $addon.StagingName
   $zipPath = Join-Path $dist "$($addon.PackageName).zip"
   $mcaddonPath = Join-Path $dist "$($addon.PackageName).mcaddon"
+  $behaviorZipPath = Join-Path $stagingRoot "$behaviorPackName.zip"
+  $behaviorMcpackPath = Join-Path $stagingRoot "$behaviorPackName.mcpack"
+  $resourceZipPath = Join-Path $stagingRoot "$resourcePackName.zip"
+  $resourceMcpackPath = Join-Path $stagingRoot "$resourcePackName.mcpack"
 
   if (-not (Test-Path (Join-Path $behaviorPackSource "manifest.json"))) {
     throw "Behavior pack manifest not found: $behaviorPackSource"
@@ -53,12 +57,17 @@ foreach ($addon in $addons) {
     Remove-Item -LiteralPath $mcaddonPath -Force
   }
 
-  New-Item -ItemType Directory -Force -Path (Join-Path $stagingRoot "behavior_packs\$behaviorPackName") | Out-Null
-  New-Item -ItemType Directory -Force -Path (Join-Path $stagingRoot "resource_packs\$resourcePackName") | Out-Null
-  Copy-Item -Path (Join-Path $behaviorPackSource "*") -Destination (Join-Path $stagingRoot "behavior_packs\$behaviorPackName") -Recurse -Force
-  Copy-Item -Path (Join-Path $resourcePackSource "*") -Destination (Join-Path $stagingRoot "resource_packs\$resourcePackName") -Recurse -Force
+  New-Item -ItemType Directory -Force -Path $stagingRoot | Out-Null
 
-  Compress-Archive -Path (Join-Path $stagingRoot "*") -DestinationPath $zipPath
+  # Each .mcpack must contain its manifest.json at the archive root.
+  Compress-Archive -Path (Join-Path $behaviorPackSource "*") -DestinationPath $behaviorZipPath
+  Move-Item -LiteralPath $behaviorZipPath -Destination $behaviorMcpackPath
+
+  Compress-Archive -Path (Join-Path $resourcePackSource "*") -DestinationPath $resourceZipPath
+  Move-Item -LiteralPath $resourceZipPath -Destination $resourceMcpackPath
+
+  # A .mcaddon is a zip containing one or more .mcpack files.
+  Compress-Archive -Path $behaviorMcpackPath, $resourceMcpackPath -DestinationPath $zipPath
   Move-Item -LiteralPath $zipPath -Destination $mcaddonPath
   Remove-Item -LiteralPath $stagingRoot -Recurse -Force
 
