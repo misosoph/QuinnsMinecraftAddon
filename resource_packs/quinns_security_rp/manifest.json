@@ -4,14 +4,14 @@
     "name": "Quinn's Security Add-On Resources",
     "description": "Resource pack scaffold for Quinn's Security Add-On.",
     "uuid": "8b6c47ea-d734-427a-a74f-28754d88dfb4",
-    "version": [1, 0, 0],
+    "version": [1, 1, 0],
     "min_engine_version": [1, 21, 0]
   },
   "modules": [
     {
       "type": "resources",
       "uuid": "7e356d7d-0648-4542-92c3-2d8459cdeab9",
-      "version": [1, 0, 0]
+      "version": [1, 1, 0]
     }
   ],
   "metadata": {
