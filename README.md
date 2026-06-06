@@ -131,7 +131,7 @@ run `/function security_kit`.
 
 ### Updating Quinn's Security Add-On
 
-The current security pack version is `1.1.0`. Before importing an older build
+The current security pack version is `1.1.1`. Before importing an older build
 again, remove both `Quinn's Security Add-On` and
 `Quinn's Security Add-On Resources` from Minecraft storage. Minecraft uses the
 manifest UUID and version to decide whether an imported pack replaces the

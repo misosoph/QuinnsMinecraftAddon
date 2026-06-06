@@ -5,13 +5,13 @@
   "num_mip_levels": 4,
   "texture_data": {
     "quinns_security_tv": {
-      "textures": "textures/blocks/black_concrete"
+      "textures": "textures/blocks/quinns_security_tv"
     },
     "quinns_security_camera": {
       "textures": "textures/blocks/quinns_security_camera"
     },
     "quinns_security_alarm": {
-      "textures": "textures/blocks/redstone_lamp_on"
+      "textures": "textures/blocks/quinns_security_alarm"
     },
     "quinns_security_laser_emitter": {
       "textures": "textures/blocks/quinns_security_laser_emitter"

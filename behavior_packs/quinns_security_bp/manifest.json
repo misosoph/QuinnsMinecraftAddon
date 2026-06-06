@@ -4,15 +4,15 @@
     "name": "Quinn's Security Add-On",
     "description": "A Minecraft Bedrock add-on scaffold for Quinn's Security features.",
     "uuid": "6fdf0eb0-2fae-4f30-9ee6-1e9fc9d6af28",
-    "version": [1, 1, 0],
-    "min_engine_version": [1, 21, 0]
+    "version": [1, 1, 1],
+    "min_engine_version": [1, 21, 60]
   },
   "modules": [
     {
       "description": "Command functions and behavior data",
       "type": "data",
       "uuid": "a0e8c18d-c8d9-44cc-b3cb-b5ec7b2d277f",
-      "version": [1, 1, 0]
+      "version": [1, 1, 1]
     },
     {
       "description": "Security device scripts",
@@ -20,7 +20,7 @@
       "language": "javascript",
       "entry": "scripts/main.js",
       "uuid": "b9eca7b6-79b2-4a10-b9cf-efc4fe7cb382",
-      "version": [1, 1, 0]
+      "version": [1, 1, 1]
     }
   ],
   "dependencies": [
@@ -30,7 +30,7 @@
     },
     {
       "uuid": "8b6c47ea-d734-427a-a74f-28754d88dfb4",
-      "version": [1, 1, 0]
+      "version": [1, 1, 1]
     }
   ],
   "metadata": {

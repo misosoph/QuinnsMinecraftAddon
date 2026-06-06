@@ -1,5 +1,5 @@
 {
-  "format_version": "1.21.0",
+  "format_version": "1.21.60",
   "minecraft:block": {
     "description": {
       "identifier": "quinns_security:laser_emitter",
@@ -15,8 +15,25 @@
       "minecraft:destructible_by_explosion": {
         "explosion_resistance": 5.0
       },
+      "minecraft:collision_box": {
+        "origin": [-6, 3, -8],
+        "size": [12, 11, 11]
+      },
+      "minecraft:selection_box": {
+        "origin": [-6, 3, -8],
+        "size": [12, 11, 11]
+      },
       "minecraft:light_emission": 8,
       "minecraft:geometry": "geometry.quinns_security.laser_emitter",
+      "minecraft:item_visual": {
+        "geometry": "geometry.quinns_security.laser_emitter",
+        "material_instances": {
+          "*": {
+            "texture": "quinns_security_laser_emitter",
+            "render_method": "opaque"
+          }
+        }
+      },
       "minecraft:map_color": "#d02020",
       "minecraft:material_instances": {
         "*": {
