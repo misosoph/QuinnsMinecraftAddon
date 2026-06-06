@@ -23,10 +23,10 @@ It includes a behavior pack, resource pack, custom security devices, and scripts
 Run `/function security_kit` to get the complete test kit, or
 `/function security_key` to get only the Huge Security Key:
 
-- Security TV: connect it to a camera by placing a security camera within 2 blocks, then interact with the TV to see what the camera detects.
-- Security Camera: a blocky security camera model that detects mobs within 10 blocks and sends nearby alarms when it sees one.
+- Security TV: a 2-block-wide, 3-block-high screen. Connect it by placing a security camera within 10 blocks, then interact with the TV for a 10-second live view through that camera.
+- Security Camera: a blocky security camera model that detects moving mobs within 10 blocks, turns toward the closest moving target, and sends nearby alarms when it sees one.
 - Security Alarm: required for cameras and laser emitters to trigger alerts.
-- Laser Beam Emitter: a giant blocky iron-ingot-shaped emitter with trident-like prongs. It works when an alarm is within 10 blocks and damages mobs in straight laser lanes for 1 heart every second.
+- Laser Beam Emitter: a giant blocky iron-ingot-shaped emitter with trident-like prongs. It points in the direction the player faced when placing it. When an alarm is within 10 blocks, its forward beam damages mobs for 1 heart every second.
 - Locked Security Door: a locked trapdoor-style block with a key shape in the face. It opens only when the player has the Huge Security Key.
 - Huge Security Key: an oversized golden key item used to unlock security doors.
 
@@ -140,7 +140,7 @@ run `/function security_kit`.
 
 ### Updating Quinn's Security Add-On
 
-The current security pack version is `1.1.3`. Before importing an older build
+The current security pack version is `1.2.0`. Before importing an older build
 again, remove both `Quinn's Security Add-On` and
 `Quinn's Security Add-On Resources` from Minecraft storage. Minecraft uses the
 manifest UUID and version to decide whether an imported pack replaces the

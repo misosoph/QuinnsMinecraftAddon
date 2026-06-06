@@ -3,10 +3,39 @@
   "minecraft:block": {
     "description": {
       "identifier": "quinns_security:security_tv",
-      "menu_category": {
-        "category": "construction"
+      "traits": {
+        "minecraft:placement_direction": {
+          "enabled_states": ["minecraft:cardinal_direction"],
+          "y_rotation_offset": 180
+        }
       }
     },
+    "permutations": [
+      {
+        "condition": "query.block_state('minecraft:cardinal_direction') == 'south'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [0, 180, 0]
+          }
+        }
+      },
+      {
+        "condition": "query.block_state('minecraft:cardinal_direction') == 'west'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [0, 90, 0]
+          }
+        }
+      },
+      {
+        "condition": "query.block_state('minecraft:cardinal_direction') == 'east'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [0, -90, 0]
+          }
+        }
+      }
+    ],
     "components": {
       "minecraft:destructible_by_mining": {
         "seconds_to_destroy": 1.0
@@ -14,11 +43,19 @@
       "minecraft:destructible_by_explosion": {
         "explosion_resistance": 6.0
       },
+      "minecraft:collision_box": {
+        "origin": [-8, 0, -4],
+        "size": [16, 16, 4]
+      },
+      "minecraft:selection_box": {
+        "origin": [-8, 0, -4],
+        "size": [16, 16, 4]
+      },
       "minecraft:geometry": "minecraft:geometry.full_block",
       "minecraft:map_color": "#101820",
       "minecraft:material_instances": {
         "*": {
-          "texture": "quinns_security_tv",
+          "texture": "quinns_security_tv_bottom_left",
           "render_method": "opaque"
         }
       }

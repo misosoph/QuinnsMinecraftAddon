@@ -1,0 +1,16 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:block": {
+    "description": {
+      "identifier": "quinns_security:security_tv_top_left"
+    },
+    "components": {
+      "minecraft:destructible_by_mining": { "seconds_to_destroy": 1.0 },
+      "minecraft:destructible_by_explosion": { "explosion_resistance": 6.0 },
+      "minecraft:geometry": "minecraft:geometry.full_block",
+      "minecraft:material_instances": {
+        "*": { "texture": "quinns_security_tv_top_left", "render_method": "opaque" }
+      }
+    }
+  }
+}

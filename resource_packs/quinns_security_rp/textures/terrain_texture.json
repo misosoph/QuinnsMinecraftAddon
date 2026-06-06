@@ -4,8 +4,23 @@
   "padding": 8,
   "num_mip_levels": 4,
   "texture_data": {
-    "quinns_security_tv": {
-      "textures": "textures/blocks/quinns_security_tv"
+    "quinns_security_tv_bottom_left": {
+      "textures": "textures/blocks/quinns_security_tv_bottom_left"
+    },
+    "quinns_security_tv_bottom_right": {
+      "textures": "textures/blocks/quinns_security_tv_bottom_right"
+    },
+    "quinns_security_tv_middle_left": {
+      "textures": "textures/blocks/quinns_security_tv_middle_left"
+    },
+    "quinns_security_tv_middle_right": {
+      "textures": "textures/blocks/quinns_security_tv_middle_right"
+    },
+    "quinns_security_tv_top_left": {
+      "textures": "textures/blocks/quinns_security_tv_top_left"
+    },
+    "quinns_security_tv_top_right": {
+      "textures": "textures/blocks/quinns_security_tv_top_right"
     },
     "quinns_security_camera": {
       "textures": "textures/blocks/quinns_security_camera"

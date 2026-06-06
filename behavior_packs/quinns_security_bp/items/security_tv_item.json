@@ -1,0 +1,21 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "quinns_security:security_tv_item",
+      "menu_category": {
+        "category": "construction"
+      }
+    },
+    "components": {
+      "minecraft:display_name": {
+        "value": "Security TV"
+      },
+      "minecraft:icon": "quinns_security_tv_item",
+      "minecraft:max_stack_size": 16,
+      "minecraft:block_placer": {
+        "block": "quinns_security:security_tv"
+      }
+    }
+  }
+}
