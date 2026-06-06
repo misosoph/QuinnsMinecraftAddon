@@ -4,8 +4,7 @@
     "description": {
       "identifier": "quinns_security:laser_emitter",
       "menu_category": {
-        "category": "items",
-        "group": "itemGroup.name.redstone"
+        "category": "construction"
       }
     },
     "components": {
@@ -25,15 +24,6 @@
       },
       "minecraft:light_emission": 8,
       "minecraft:geometry": "geometry.quinns_security.laser_emitter",
-      "minecraft:item_visual": {
-        "geometry": "geometry.quinns_security.laser_emitter",
-        "material_instances": {
-          "*": {
-            "texture": "quinns_security_laser_emitter",
-            "render_method": "opaque"
-          }
-        }
-      },
       "minecraft:map_color": "#d02020",
       "minecraft:material_instances": {
         "*": {

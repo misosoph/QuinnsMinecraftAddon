@@ -4,8 +4,7 @@
     "description": {
       "identifier": "quinns_security:locked_security_door",
       "menu_category": {
-        "category": "items",
-        "group": "itemGroup.name.construction"
+        "category": "construction"
       }
     },
     "components": {
@@ -24,15 +23,6 @@
         "size": [16, 14, 4]
       },
       "minecraft:geometry": "geometry.quinns_security.locked_security_door",
-      "minecraft:item_visual": {
-        "geometry": "geometry.quinns_security.locked_security_door",
-        "material_instances": {
-          "*": {
-            "texture": "quinns_security_locked_door",
-            "render_method": "opaque"
-          }
-        }
-      },
       "minecraft:map_color": "#4a4a4a",
       "minecraft:material_instances": {
         "*": {

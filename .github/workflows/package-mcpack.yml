@@ -23,12 +23,18 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: quinns-enderstorm-addon
-          path: dist/quinns-enderstorm.mcaddon
+          path: |
+            dist/quinns-enderstorm.mcaddon
+            dist/quinns-enderstorm-bp.mcpack
+            dist/quinns-enderstorm-rp.mcpack
           if-no-files-found: error
 
       - name: Upload Security Add-On artifact
         uses: actions/upload-artifact@v4
         with:
           name: quinns-security-addon
-          path: dist/quinns-security-addon.mcaddon
+          path: |
+            dist/quinns-security-addon.mcaddon
+            dist/quinns-security-addon-bp.mcpack
+            dist/quinns-security-addon-rp.mcpack
           if-no-files-found: error

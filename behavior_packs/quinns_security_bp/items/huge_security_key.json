@@ -4,8 +4,7 @@
     "description": {
       "identifier": "quinns_security:huge_security_key",
       "menu_category": {
-        "category": "equipment",
-        "group": "itemGroup.name.tools"
+        "category": "equipment"
       }
     },
     "components": {

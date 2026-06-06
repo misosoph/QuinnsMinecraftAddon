@@ -20,7 +20,8 @@ A companion resource pack adds the dark red battle sky during the Enderstorm fig
 
 A starter Minecraft Bedrock add-on scaffold for security features.
 It includes a behavior pack, resource pack, custom security devices, and scripts.
-Run `/function security_kit` to get the test items:
+Run `/function security_kit` to get the complete test kit, or
+`/function security_key` to get only the Huge Security Key:
 
 - Security TV: connect it to a camera by placing a security camera within 2 blocks, then interact with the TV to see what the camera detects.
 - Security Camera: a blocky security camera model that detects mobs within 10 blocks and sends nearby alarms when it sees one.
@@ -85,7 +86,11 @@ packages. Later, this project can be upgraded to a full TypeScript compiler setu
 This creates:
 
 - `dist/quinns-enderstorm.mcaddon`
+- `dist/quinns-enderstorm-bp.mcpack`
+- `dist/quinns-enderstorm-rp.mcpack`
 - `dist/quinns-security-addon.mcaddon`
+- `dist/quinns-security-addon-bp.mcpack`
+- `dist/quinns-security-addon-rp.mcpack`
 
 > Note: do not commit packaged binaries to pull requests if your PR workflow
 > rejects binary files. This repo ignores `dist/*.mcaddon` and publishes the
@@ -98,6 +103,9 @@ This creates:
 3. Download the **quinns-security-addon** artifact.
 4. Extract the downloaded GitHub artifact ZIP.
 5. Open `quinns-security-addon.mcaddon` from the extracted folder in Minecraft.
+6. If the combined file does not install both packs, open
+   `quinns-security-addon-bp.mcpack` and
+   `quinns-security-addon-rp.mcpack` separately.
 
 ## Install For Local Testing
 
@@ -132,14 +140,15 @@ run `/function security_kit`.
 
 ### Updating Quinn's Security Add-On
 
-The current security pack version is `1.1.2`. Before importing an older build
+The current security pack version is `1.1.3`. Before importing an older build
 again, remove both `Quinn's Security Add-On` and
 `Quinn's Security Add-On Resources` from Minecraft storage. Minecraft uses the
 manifest UUID and version to decide whether an imported pack replaces the
 installed copy.
 
-The generated `.mcaddon` contains separate behavior and resource `.mcpack`
-archives. Each inner pack has its `manifest.json` at the archive root, which is
-the layout required for Minecraft to import both packs.
+The generated `.mcaddon` contains the behavior and resource pack folders at its
+top level. The GitHub artifact also includes standalone behavior and resource
+`.mcpack` files for Bedrock clients that do not import both packs from the
+combined `.mcaddon`.
 
 If the pack does not load, enable the Content Log in `Settings > Creator`.

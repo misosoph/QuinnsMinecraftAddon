@@ -4,8 +4,7 @@
     "description": {
       "identifier": "quinns_security:security_alarm",
       "menu_category": {
-        "category": "items",
-        "group": "itemGroup.name.redstone"
+        "category": "construction"
       }
     },
     "components": {
@@ -16,15 +15,6 @@
         "explosion_resistance": 4.0
       },
       "minecraft:geometry": "minecraft:geometry.full_block",
-      "minecraft:item_visual": {
-        "geometry": "minecraft:geometry.full_block",
-        "material_instances": {
-          "*": {
-            "texture": "quinns_security_alarm",
-            "render_method": "opaque"
-          }
-        }
-      },
       "minecraft:map_color": "#9d1010",
       "minecraft:material_instances": {
         "*": {

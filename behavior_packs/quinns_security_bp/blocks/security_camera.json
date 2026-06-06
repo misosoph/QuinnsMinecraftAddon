@@ -4,8 +4,7 @@
     "description": {
       "identifier": "quinns_security:security_camera",
       "menu_category": {
-        "category": "items",
-        "group": "itemGroup.name.construction"
+        "category": "construction"
       }
     },
     "components": {
@@ -24,15 +23,6 @@
         "size": [10, 11, 12]
       },
       "minecraft:geometry": "geometry.quinns_security.security_camera",
-      "minecraft:item_visual": {
-        "geometry": "geometry.quinns_security.security_camera",
-        "material_instances": {
-          "*": {
-            "texture": "quinns_security_camera",
-            "render_method": "opaque"
-          }
-        }
-      },
       "minecraft:map_color": "#303030",
       "minecraft:material_instances": {
         "*": {
