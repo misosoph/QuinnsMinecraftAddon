@@ -30,6 +30,20 @@ Run `/function security_kit` to get the complete test kit, or
 - Locked Security Door: a locked trapdoor-style block with a key shape in the face. It opens only when the player has the Huge Security Key.
 - Huge Security Key: an oversized golden key item used to unlock security doors.
 
+### Quinn's Cayman Islands Add-On
+
+A standalone Minecraft Bedrock add-on that starts the player in a Cayman Islands
+hotel room with a tamed dog and builds a small resort island around spawn.
+It uses renamed vanilla entities so the pack works without any other mods:
+
+- Lizards everywhere, represented by small renamed silverfish.
+- Chickens around the hotel grounds.
+- Villagers named as hotel, restaurant, cleaning, and beach-tour workers.
+- Sting rays and rainbow fish in the shallow water around the island.
+- A hotel room, lobby, restaurant, dock, beach stand, paths, palm trees, sand, and shallow water.
+- Run `/function cayman_start` to rebuild the hotel-room start for the current player.
+- Run `/function cayman_reset_area` to clear the Cayman animals/staff and rebuild the start.
+
 ## Files
 
 ```text
@@ -48,12 +62,23 @@ QuinnsMinecraftAddon
 |       `-- functions
 |           |-- hello_security.mcfunction
 |           `-- security_kit.mcfunction
+|   `-- quinns_cayman_bp
+|       |-- manifest.json
+|       |-- functions
+|       |   |-- cayman_reset_area.mcfunction
+|       |   `-- cayman_start.mcfunction
+|       `-- scripts
+|           `-- main.js
 |-- resource_packs
 |   |-- quinns_enderstorm_rp
 |   |   |-- manifest.json
 |   |   `-- fogs
 |   |       `-- battle_sky.json
 |   `-- quinns_security_rp
+|       |-- manifest.json
+|       `-- texts
+|           `-- en_US.lang
+|   `-- quinns_cayman_rp
 |       |-- manifest.json
 |       `-- texts
 |           `-- en_US.lang
@@ -91,6 +116,9 @@ This creates:
 - `dist/quinns-security-addon.mcaddon`
 - `dist/quinns-security-addon-bp.mcpack`
 - `dist/quinns-security-addon-rp.mcpack`
+- `dist/quinns-cayman-islands.mcaddon`
+- `dist/quinns-cayman-islands-bp.mcpack`
+- `dist/quinns-cayman-islands-rp.mcpack`
 
 > Note: do not commit packaged binaries to pull requests if your PR workflow
 > rejects binary files. This repo ignores `dist/*.mcaddon` and publishes the
@@ -137,6 +165,12 @@ uses a custom location, pass it explicitly:
 For Quinn's Security Add-On, activate `Quinn's Security Add-On Resources`
 under Resource Packs and `Quinn's Security Add-On` under Behavior Packs, then
 run `/function security_kit`.
+
+For Quinn's Cayman Islands Add-On, activate `Quinn's Cayman Islands Resources`
+under Resource Packs and `Quinn's Cayman Islands Add-On` under Behavior Packs.
+When you enter the world, the script moves you into a hotel room, gives you a
+tamed dog, builds the Cayman resort area, and keeps the animals and workers
+populated near spawn.
 
 ### Updating Quinn's Security Add-On
 

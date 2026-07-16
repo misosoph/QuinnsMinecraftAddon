@@ -18,6 +18,12 @@ $addons = @(
     ResourcePackName = "quinns_security_rp"
     BehaviorDisplayName = "Quinn's Security Add-On"
     ResourceDisplayName = "Quinn's Security Add-On Resources"
+  },
+  @{
+    BehaviorPackName = "quinns_cayman_bp"
+    ResourcePackName = "quinns_cayman_rp"
+    BehaviorDisplayName = "Quinn's Cayman Islands Add-On"
+    ResourceDisplayName = "Quinn's Cayman Islands Resources"
   }
 )
 

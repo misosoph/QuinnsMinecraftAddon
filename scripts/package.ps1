@@ -17,6 +17,12 @@ $addons = @(
     StagingName = "quinns-security-addon"
     BehaviorPackName = "quinns_security_bp"
     ResourcePackName = "quinns_security_rp"
+  },
+  @{
+    PackageName = "quinns-cayman-islands"
+    StagingName = "quinns-cayman-islands-addon"
+    BehaviorPackName = "quinns_cayman_bp"
+    ResourcePackName = "quinns_cayman_rp"
   }
 )
 
