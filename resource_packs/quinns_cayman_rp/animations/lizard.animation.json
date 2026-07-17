@@ -1,0 +1,25 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.quinns_cayman_lizard.crawl": {
+      "loop": true,
+      "bones": {
+        "tail": {
+          "rotation": [0, "math.sin(query.life_time * 360) * 10", 0]
+        },
+        "front_left_leg": {
+          "rotation": [0, 0, "math.sin(query.life_time * 420) * 12"]
+        },
+        "front_right_leg": {
+          "rotation": [0, 0, "math.sin(query.life_time * 420 + 180) * 12"]
+        },
+        "back_left_leg": {
+          "rotation": [0, 0, "math.sin(query.life_time * 420 + 180) * 12"]
+        },
+        "back_right_leg": {
+          "rotation": [0, 0, "math.sin(query.life_time * 420) * 12"]
+        }
+      }
+    }
+  }
+}

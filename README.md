@@ -36,10 +36,10 @@ A standalone Minecraft Bedrock add-on that starts the player in a Cayman Islands
 hotel room with a tamed dog and builds a small resort island around spawn.
 It uses renamed vanilla entities so the pack works without any other mods:
 
-- Lizards everywhere, represented by small renamed silverfish.
+- Custom green lizards everywhere, with a low lizard body, legs, tail, and green spotted texture.
 - Chickens around the hotel grounds.
 - Villagers named as hotel, restaurant, cleaning, and beach-tour workers.
-- Sting rays and rainbow fish in the shallow water around the island.
+- Custom sting rays with broad flat bodies, wide fins, and long tails, plus rainbow fish in the shallow water around the island.
 - A hotel room, lobby, restaurant, dock, beach stand, paths, palm trees, sand, and shallow water.
 - Run `/function cayman_start` to rebuild the hotel-room start for the current player.
 - Run `/function cayman_reset_area` to clear the Cayman animals/staff and rebuild the start.

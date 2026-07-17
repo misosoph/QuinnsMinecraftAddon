@@ -1,0 +1,26 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "quinns_cayman:lizard",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/quinns_cayman_lizard"
+      },
+      "geometry": {
+        "default": "geometry.quinns_cayman_lizard"
+      },
+      "animations": {
+        "crawl": "animation.quinns_cayman_lizard.crawl"
+      },
+      "scripts": {
+        "animate": ["crawl"]
+      },
+      "render_controllers": [
+        "controller.render.default"
+      ]
+    }
+  }
+}

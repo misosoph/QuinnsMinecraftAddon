@@ -1,2 +1,4 @@
 pack.name=Quinn's Cayman Islands Resources
 pack.description=Resource pack companion for Quinn's Cayman Islands Add-On.
+entity.quinns_cayman:lizard.name=Green Lizard
+entity.quinns_cayman:stingray.name=Sting Ray

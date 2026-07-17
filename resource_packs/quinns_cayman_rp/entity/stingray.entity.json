@@ -1,0 +1,28 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "quinns_cayman:stingray",
+      "materials": {
+        "default": "entity_alphatest",
+        "eyes": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/quinns_cayman_stingray",
+        "eyes": "textures/entity/quinns_cayman_stingray_eyes"
+      },
+      "geometry": {
+        "default": "geometry.quinns_cayman_stingray"
+      },
+      "animations": {
+        "swim": "animation.quinns_cayman_stingray.swim"
+      },
+      "scripts": {
+        "animate": ["swim"]
+      },
+      "render_controllers": [
+        "controller.render.default"
+      ]
+    }
+  }
+}

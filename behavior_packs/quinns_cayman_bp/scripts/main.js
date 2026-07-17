@@ -5,6 +5,8 @@ const FORCE_REBUILD_TAG = "quinn_cayman_force_rebuild";
 const ANIMAL_TAG = "quinn_cayman_animal";
 const STAFF_TAG = "quinn_cayman_staff";
 const DOG_TAG = "quinn_cayman_dog";
+const LIZARD_ID = "quinns_cayman:lizard";
+const STINGRAY_ID = "quinns_cayman:stingray";
 const CENTER = { x: 0, y: 66, z: 0 };
 const HOTEL_ROOM = { x: 4.5, y: 68, z: 2.5 };
 const POPULATION_RADIUS = 72;
@@ -208,9 +210,9 @@ function maintainStaff(dimension) {
 
 function maintainAnimals() {
   const overworld = world.getDimension("overworld");
-  refillNamedAnimals(overworld, "Lizard", "minecraft:silverfish", 18, randomBeachLocation);
+  refillNamedAnimals(overworld, "Green Lizard", LIZARD_ID, 18, randomBeachLocation);
   refillNamedAnimals(overworld, "Chicken", "minecraft:chicken", 12, randomBeachLocation);
-  refillNamedAnimals(overworld, "Sting Ray", "minecraft:tropicalfish", 8, randomShallowWaterLocation);
+  refillNamedAnimals(overworld, "Sting Ray", STINGRAY_ID, 8, randomShallowWaterLocation);
   refillNamedAnimals(overworld, "Rainbow Fish", "minecraft:tropicalfish", 14, randomShallowWaterLocation);
   maintainStaff(overworld);
 }

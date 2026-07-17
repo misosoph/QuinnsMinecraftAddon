@@ -1,0 +1,19 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.quinns_cayman_stingray.swim": {
+      "loop": true,
+      "bones": {
+        "left_wing": {
+          "rotation": ["math.sin(query.life_time * 180) * 5", 0, 0]
+        },
+        "right_wing": {
+          "rotation": ["math.sin(query.life_time * 180 + 180) * 5", 0, 0]
+        },
+        "tail": {
+          "rotation": [0, "math.sin(query.life_time * 180) * 12", 0]
+        }
+      }
+    }
+  }
+}
