@@ -1,7 +1,7 @@
 import { system, world } from "@minecraft/server";
 
 const STARTED_TAG = "quinn_cayman_started";
-const BUILD_TAG = "quinn_cayman_build_190";
+const BUILD_TAG = "quinn_cayman_build_1100";
 const FORCE_REBUILD_TAG = "quinn_cayman_force_rebuild";
 const ANIMAL_TAG = "quinn_cayman_animal";
 const STAFF_TAG = "quinn_cayman_staff";
@@ -11,7 +11,7 @@ const STINGRAY_ID = "quinns_cayman:stingray";
 const STINGRAY_COUNT = 48;
 const CENTER = { x: 0, y: 66, z: 0 };
 const HOTEL_ROOM = { x: 5.5, y: 68, z: -19.5 };
-const DOG_SPAWN = { x: 10.5, y: 67, z: 34.5 };
+const DOG_SPAWN = { x: 9.5, y: 67, z: -17.5 };
 const HOTEL_BOUNDS = { minX: -39, maxX: 39, minZ: -31, maxZ: 30 };
 const POPULATION_RADIUS = 110;
 const welcomedPlayers = new Set();
@@ -134,6 +134,11 @@ function buildHotel() {
       queue(`setblock ${doorX - 3} ${floorY + 1} -23 red_bed [\"direction\"=2]`);
       queue(`setblock ${doorX - 2} ${floorY + 1} -23 red_bed [\"direction\"=2,\"head_piece_bit\"=true]`);
       queue(`setblock ${doorX + 3} ${floorY + 1} -23 chest [\"minecraft:cardinal_direction\"=\"south\"]`);
+      queue(`fill ${doorX + 1} ${floorY + 1} -14 ${doorX + 4} ${floorY + 1} -14 dark_oak_planks`);
+      queue(`setblock ${doorX + 2} ${floorY + 1} -16 spruce_stairs [\"weirdo_direction\"=2]`);
+      queue(`setblock ${doorX - 1} ${floorY + 1} -18 spruce_stairs [\"weirdo_direction\"=1]`);
+      queue(`setblock ${doorX + 4} ${floorY + 1} -20 barrel`);
+      queue(`setblock ${doorX + 4} ${floorY + 2} -20 barrel`);
       queue(`setblock ${doorX} ${floorY + 6} -16 sea_lantern`);
     }
   }
@@ -271,6 +276,11 @@ function buildHotel() {
   queue("setblock 5 67 -23 red_bed [\"direction\"=2,\"head_piece_bit\"=true]");
   queue("setblock 10 67 -23 chest [\"minecraft:cardinal_direction\"=\"south\"]");
   queue("setblock 12 67 -14 crafting_table");
+  queue("fill 2 67 -15 5 67 -15 dark_oak_planks");
+  queue("setblock 3 67 -17 spruce_stairs [\"weirdo_direction\"=2]");
+  queue("setblock 9 67 -21 spruce_stairs [\"weirdo_direction\"=1]");
+  queue("setblock 11 67 -19 barrel");
+  queue("setblock 11 68 -19 barrel");
   queue("setblock 7 67 -12 oak_door [\"direction\"=0]");
   queue("setblock 7 68 -12 oak_door [\"direction\"=0,\"upper_block_bit\"=true]");
 
@@ -281,6 +291,9 @@ function buildHotel() {
       queue(`setblock ${doorX} ${floorY + 2} -6 dark_oak_door [\"direction\"=0,\"upper_block_bit\"=true]`);
     }
   }
+
+  queue("setblock 7 67 -12 oak_door [\"direction\"=0]");
+  queue("setblock 7 68 -12 oak_door [\"direction\"=0,\"upper_block_bit\"=true]");
 
   for (const [torchX, torchZ] of [
     [-18, 4],
@@ -520,7 +533,7 @@ function giveDog(player) {
 
     if (!tryPlayerCommand(player, `tame @e[type=wolf,tag=${DOG_TAG},c=1]`)) {
       tryPlayerCommand(player, `event entity @e[type=wolf,tag=${DOG_TAG},c=1] minecraft:on_tame`);
-      player.sendMessage("Your dog is waiting outside the grand entrance. If it is not sitting, give it a bone to finish taming.");
+      player.sendMessage("Your hotel dog is waiting inside your room. If it is not sitting, give it a bone to finish taming.");
     }
   } catch (error) {
     player.sendMessage("The hotel dog tried to arrive, but Minecraft blocked the wolf spawn.");

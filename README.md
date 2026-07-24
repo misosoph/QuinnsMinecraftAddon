@@ -33,7 +33,7 @@ Run `/function security_kit` to get the complete test kit, or
 ### Quinn's Cayman Islands Add-On
 
 A standalone Minecraft Bedrock add-on that starts the player in a Cayman Islands
-hotel room with a tamed dog waiting outside the grand entrance and builds a large resort island around spawn.
+hotel room with a tamed dog inside the room and builds a large resort island around spawn.
 It uses renamed vanilla entities so the pack works without any other mods:
 
 - Custom green lizards everywhere, with a low lizard body, legs, tail, and green spotted texture.
@@ -41,7 +41,7 @@ It uses renamed vanilla entities so the pack works without any other mods:
 - Eight villagers named as hotel, restaurant, shop, cleaning, residential, and beach-tour workers.
 - Many custom sting rays with broad flat bodies, wide fins, and long tails, plus rainbow fish in the shallow water around the island.
 - A large hotel with a capacious five-storey atrium lobby, grand staircase, balconies, chandelier, eight-storey glass entrance tower with grand double doors, restaurant, and private spawn room.
-- Twenty-four upper-floor guest rooms, each with its own door, exterior window, bed, chest, and ceiling light.
+- Twenty-four upper-floor guest rooms, each with its own door, exterior window, bed, desk, drawers, chairs, chest, and ceiling light.
 - Continuous illuminated hallways lead from every guest-room door to staircases connecting all five hotel floors.
 - Peaceful difficulty and disabled natural mob spawning prevent hostile mobs and animals from spawning inside the hotel. Cayman wildlife is kept outdoors.
 - A dock, beach stand, shops, villager houses, paths, palm trees, sand, and shallow water. Every hotel, shop, and house has a solid land foundation.
