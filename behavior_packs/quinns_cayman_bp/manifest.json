@@ -4,7 +4,7 @@
     "name": "Quinn's Cayman Islands Add-On",
     "description": "A Cayman Islands hotel spawn with lizards, chickens, workers, sting rays, rainbow fish, and a tamed dog.",
     "uuid": "dae93077-ec76-48db-9d13-80445fdd5484",
-    "version": [1, 11, 0],
+    "version": [1, 13, 0],
     "min_engine_version": [1, 21, 60]
   },
   "modules": [
@@ -12,7 +12,7 @@
       "description": "Command functions and behavior data",
       "type": "data",
       "uuid": "7fcbcb97-a018-4a29-b50d-1b1f5bdd6760",
-      "version": [1, 11, 0]
+      "version": [1, 13, 0]
     },
     {
       "description": "Cayman Islands hotel scripts",
@@ -20,7 +20,7 @@
       "language": "javascript",
       "entry": "scripts/main.js",
       "uuid": "0339dc6d-e877-4bbd-bd40-14f097718c3d",
-      "version": [1, 11, 0]
+      "version": [1, 13, 0]
     }
   ],
   "dependencies": [
@@ -30,7 +30,7 @@
     },
     {
       "uuid": "da60acac-68b3-40fa-be79-6b2d107a7a42",
-      "version": [1, 11, 0]
+      "version": [1, 13, 0]
     }
   ],
   "metadata": {

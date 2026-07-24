@@ -1,7 +1,7 @@
 import { system, world } from "@minecraft/server";
 
 const STARTED_TAG = "quinn_cayman_started";
-const BUILD_TAG = "quinn_cayman_build_1110";
+const BUILD_TAG = "quinn_cayman_build_1130";
 const FORCE_REBUILD_TAG = "quinn_cayman_force_rebuild";
 const ANIMAL_TAG = "quinn_cayman_animal";
 const STAFF_TAG = "quinn_cayman_staff";
@@ -21,12 +21,9 @@ let resortBuilt = false;
 const STAFF = [
   { name: "Front Desk Worker", x: 6.5, y: 67, z: 0.5 },
   { name: "Restaurant Chef", x: -28.5, y: 67, z: -9.5 },
-  { name: "Restaurant Server", x: -24.5, y: 67, z: -3.5 },
   { name: "Hotel Cleaner", x: 17.5, y: 67, z: -18.5 },
   { name: "Beach Tour Guide", x: 22.5, y: 67, z: 25.5 },
-  { name: "Bakery Clerk", x: 38.5, y: 67, z: -43.5 },
   { name: "Island Market Seller", x: 49.5, y: 67, z: -43.5 },
-  { name: "Hotel Staff Resident 1", x: -49.5, y: 67, z: 48.5 },
 ];
 
 const PALMS = [
@@ -152,6 +149,16 @@ function buildHotel() {
     for (const torchX of [-32, -20, -8, 8, 20, 32]) {
       queue(`setblock ${torchX} ${floorY + 1} 0 torch`);
     }
+
+    for (const torchX of [-26, -14, -2, 14, 26]) {
+      queue(`setblock ${torchX} ${floorY + 1} -4 torch`);
+    }
+
+    for (const sideX of [-34, -24, 24, 34]) {
+      for (const torchZ of [4, 12, 20]) {
+        queue(`setblock ${sideX} ${floorY + 1} ${torchZ} torch`);
+      }
+    }
   }
 
   // Matching stair flights connect floors 2-5 from both sides of the atrium.
@@ -172,7 +179,9 @@ function buildHotel() {
       }
 
       queue(`setblock ${minX} ${floorY + 1} ${stairStartZ - 1} torch`);
+      queue(`setblock ${maxX} ${floorY + 1} ${stairStartZ - 1} torch`);
       queue(`setblock ${minX} ${floorY + 7} ${stairStartZ + 6} torch`);
+      queue(`setblock ${maxX} ${floorY + 7} ${stairStartZ + 6} torch`);
     }
   }
 
@@ -299,11 +308,27 @@ function buildHotel() {
     [-18, 4],
     [-18, 12],
     [-18, 20],
+    [-10, 4],
+    [-10, 12],
+    [-10, 20],
+    [10, 4],
+    [10, 12],
+    [10, 20],
     [18, 4],
     [18, 12],
     [18, 20],
     [-6, 22],
     [6, 22],
+    [-12, 0],
+    [12, 0],
+    [-33, -14],
+    [-24, -14],
+    [-33, -2],
+    [2, -24],
+    [12, -24],
+    [2, -13],
+    [-4, 26],
+    [4, 26],
   ]) {
     queue(`setblock ${torchX} 67 ${torchZ} torch`);
   }
@@ -338,6 +363,37 @@ function buildHouse(x, z, wall, roof) {
   queue(`setblock ${x + 3} 67 ${z + 2} red_bed [\"direction\"=2,\"head_piece_bit\"=true]`);
   queue(`setblock ${x + 6} 67 ${z + 3} chest`);
   queue(`setblock ${x + 1} 70 ${z + 1} lantern`);
+}
+
+function buildBeachStand() {
+  queueFill(-32, 58, 31, -18, 65, 40, "sandstone");
+  queueFill(-32, 66, 31, -18, 66, 40, "sand");
+  queueFill(-30, 66, 32, -20, 66, 38, "yellow_concrete");
+  queueFill(-30, 67, 32, -20, 70, 38, "white_concrete", "hollow");
+  queueFill(-31, 71, 31, -19, 71, 39, "yellow_concrete");
+  queue("fill -29 68 38 -27 69 38 glass");
+  queue("fill -23 68 38 -21 69 38 glass");
+  queue("setblock -25 67 35 chest");
+  queue("setblock -29 70 33 lantern");
+  queue("setblock -25 67 40 bell");
+  queue("setblock -25 67 38 oak_door [\"direction\"=0]");
+  queue("setblock -25 68 38 oak_door [\"direction\"=0,\"upper_block_bit\"=true]");
+}
+
+function ensureExteriorDoors() {
+  for (const [doorX, doorZ] of [
+    [38, -44],
+    [49, -44],
+    [60, -44],
+    [-50, 52],
+    [-38, 52],
+    [40, 52],
+    [52, 52],
+    [-25, 38],
+  ]) {
+    queue(`setblock ${doorX} 67 ${doorZ} oak_door [\"direction\"=0]`);
+    queue(`setblock ${doorX} 68 ${doorZ} oak_door [\"direction\"=0,\"upper_block_bit\"=true]`);
+  }
 }
 
 function buildResort() {
@@ -379,9 +435,6 @@ function buildResort() {
   queue("fill 61 66 9 69 66 9 oak_fence");
   queue("setblock 64 66 8 lantern");
   queue("setblock 68 66 8 lantern");
-  queue("fill -32 65 31 -18 65 38 yellow_concrete");
-  queue("fill -30 66 32 -20 66 36 white_wool");
-  queue("setblock -25 67 34 bell");
   queue("fill -36 65 -8 -16 65 -6 stone_bricks");
   queue("fill -16 65 -6 20 65 -4 stone_bricks");
   queue("fill 20 65 -4 31 65 7 stone_bricks");
@@ -395,11 +448,13 @@ function buildResort() {
   buildHouse(-42, 44, "birch_planks", "spruce_planks");
   buildHouse(36, 44, "spruce_planks", "red_concrete");
   buildHouse(48, 44, "acacia_planks", "orange_concrete");
+  buildBeachStand();
 
   for (const [x, z] of PALMS) {
     buildPalm(x, z);
   }
 
+  ensureExteriorDoors();
   queue("tickingarea remove quinn_cayman_build");
 }
 

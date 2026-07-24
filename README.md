@@ -38,13 +38,13 @@ It uses renamed vanilla entities so the pack works without any other mods:
 
 - Custom green lizards everywhere, with a low lizard body, legs, tail, and green spotted texture.
 - Chickens around the hotel grounds.
-- Eight villagers named as hotel, restaurant, shop, cleaning, residential, and beach-tour workers.
+- Five villagers named as front-desk, restaurant, shop, cleaning, and beach-tour workers.
 - Many custom sting rays with broad flat bodies, wide fins, and long tails, plus rainbow fish in the shallow water around the island.
 - A large hotel with a capacious five-storey atrium lobby, grand staircase, balconies, chandelier, eight-storey glass entrance tower with grand double doors, restaurant, and private spawn room.
 - Twenty-four upper-floor guest rooms, each with its own door, exterior window, bed, desk, drawers, chairs, chest, and ceiling light.
-- Continuous illuminated hallways lead from every guest-room door to staircases connecting all five hotel floors.
+- Densely illuminated hallways lead from every guest-room door to lit staircases connecting all five hotel floors, with additional torches throughout the lobby, restaurant, reception, entrance, and private spawn room.
 - Peaceful difficulty and disabled natural mob spawning prevent hostile mobs and animals from spawning inside the hotel. Cayman wildlife is kept outdoors.
-- A wide, stepped sandy beach with no trees on the sand, plus a dock, beach stand, shops, villager houses, paths, inland palm trees, and shallow water. Every hotel, shop, and house has a solid land foundation.
+- A wide, stepped sandy beach with no trees on the sand, plus a dock, enclosed beach stand, shops, villager houses, paths, inland palm trees, and shallow water. Every surrounding building has a solid foundation and a working door.
 - Run `/function cayman_start` to rebuild the hotel-room start for the current player.
 - Run `/function cayman_reset_area` to clear the Cayman animals/staff and rebuild the start.
 
