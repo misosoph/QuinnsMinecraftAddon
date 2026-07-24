@@ -38,3 +38,13 @@ jobs:
             dist/quinns-security-addon-bp.mcpack
             dist/quinns-security-addon-rp.mcpack
           if-no-files-found: error
+
+      - name: Upload Cayman Islands Add-On artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: quinns-cayman-islands-addon
+          path: |
+            dist/quinns-cayman-islands.mcaddon
+            dist/quinns-cayman-islands-bp.mcpack
+            dist/quinns-cayman-islands-rp.mcpack
+          if-no-files-found: error

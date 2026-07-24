@@ -128,12 +128,11 @@ This creates:
 
 1. Open the **Actions** tab in GitHub.
 2. Run **Package Minecraft Add-on** (or open any recent run on your branch/PR).
-3. Download the **quinns-security-addon** artifact.
+3. Download the **quinns-cayman-islands-addon** artifact for the Cayman Islands add-on, or download one of the other add-on artifacts.
 4. Extract the downloaded GitHub artifact ZIP.
-5. Open `quinns-security-addon.mcaddon` from the extracted folder in Minecraft.
+5. Open the matching `.mcaddon` file from the extracted folder in Minecraft.
 6. If the combined file does not install both packs, open
-   `quinns-security-addon-bp.mcpack` and
-   `quinns-security-addon-rp.mcpack` separately.
+   the matching `-bp.mcpack` and `-rp.mcpack` files separately.
 
 ## Install For Local Testing
 
