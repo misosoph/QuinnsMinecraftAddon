@@ -7,28 +7,38 @@ const STAFF_TAG = "quinn_cayman_staff";
 const DOG_TAG = "quinn_cayman_dog";
 const LIZARD_ID = "quinns_cayman:lizard";
 const STINGRAY_ID = "quinns_cayman:stingray";
+const STINGRAY_COUNT = 36;
 const CENTER = { x: 0, y: 66, z: 0 };
 const HOTEL_ROOM = { x: 4.5, y: 68, z: 2.5 };
-const POPULATION_RADIUS = 72;
+const POPULATION_RADIUS = 110;
 const welcomedPlayers = new Set();
 let commandQueue = [];
 let resortBuilt = false;
 
 const STAFF = [
-  { name: "Front Desk Worker", x: 4.5, y: 66, z: 10.5 },
-  { name: "Restaurant Chef", x: -9.5, y: 66, z: 9.5 },
-  { name: "Restaurant Server", x: -5.5, y: 66, z: 12.5 },
+  { name: "Front Desk Worker", x: 4.5, y: 67, z: 10.5 },
+  { name: "Restaurant Chef", x: -9.5, y: 67, z: 9.5 },
+  { name: "Restaurant Server", x: -5.5, y: 67, z: 12.5 },
   { name: "Hotel Cleaner", x: 11.5, y: 67, z: -3.5 },
-  { name: "Beach Tour Guide", x: 22.5, y: 65, z: 18.5 },
+  { name: "Beach Tour Guide", x: 22.5, y: 67, z: 18.5 },
+  { name: "Bakery Clerk", x: 38.5, y: 67, z: -11.5 },
+  { name: "Island Market Seller", x: 49.5, y: 67, z: -11.5 },
+  { name: "Souvenir Shop Clerk", x: 60.5, y: 67, z: -11.5 },
+  { name: "Hotel Staff Resident 1", x: -49.5, y: 67, z: 28.5 },
+  { name: "Hotel Staff Resident 2", x: -37.5, y: 67, z: 28.5 },
+  { name: "Hotel Staff Resident 3", x: 39.5, y: 67, z: 28.5 },
+  { name: "Hotel Staff Resident 4", x: 51.5, y: 67, z: 28.5 },
 ];
 
 const PALMS = [
-  [-28, -22],
-  [-24, 25],
-  [27, -24],
-  [31, 19],
-  [-14, 35],
-  [35, -6],
+  [-58, -52],
+  [-55, 48],
+  [55, -50],
+  [58, 46],
+  [-18, 48],
+  [20, 47],
+  [62, 8],
+  [-62, 8],
 ];
 
 function hasTag(entity, tag) {
@@ -71,6 +81,70 @@ function buildPalm(x, z) {
   queue(`setblock ${x} 73 ${z} jungle_leaves`);
 }
 
+function buildHotel() {
+  queue("fill -30 66 -22 30 78 18 smooth_quartz hollow");
+  queue("fill -28 66 -20 28 66 16 birch_planks");
+  queue("fill -28 72 -20 28 72 16 birch_planks");
+  queue("fill -28 77 -20 28 77 16 birch_planks");
+  queue("fill -28 68 -21 28 70 -21 glass");
+  queue("fill -28 74 -21 28 76 -21 glass");
+  queue("fill -28 68 18 28 70 18 glass");
+  queue("fill -28 74 18 28 76 18 glass");
+  queue("fill -30 68 -18 -30 70 14 glass");
+  queue("fill 30 68 -18 30 70 14 glass");
+  queue("fill -32 79 -24 32 79 20 quartz_block");
+  queue("fill -27 73 -18 27 73 16 oak_planks");
+  queue("fill -27 74 -18 27 74 -18 oak_fence");
+  queue("fill -27 74 16 27 74 16 oak_fence");
+  queue("setblock 0 66 18 oak_door [\"direction\"=0]");
+  queue("setblock 0 67 18 oak_door [\"direction\"=0,\"upper_block_bit\"=true]");
+  queue("setblock 0 79 18 sea_lantern");
+  queue("fill -10 67 9 10 67 9 dark_oak_planks");
+  queue("setblock 4 67 14 lectern");
+  queue("setblock -9 67 10 smoker");
+  queue("setblock -7 67 10 cauldron");
+  queue("fill -9 67 12 -5 67 12 spruce_stairs [\"weirdo_direction\"=2]");
+  queue("fill -8 67 14 -4 67 14 oak_fence");
+
+  // Quinn's room sits inside the larger hotel shell at the world spawn.
+  queue("fill 0 66 -6 12 70 6 smooth_quartz hollow");
+  queue("fill 1 66 -5 11 66 5 birch_planks");
+  queue("fill 1 67 -5 11 69 5 air");
+  queue("setblock 4 66 -4 red_bed [\"direction\"=2]");
+  queue("setblock 5 66 -4 red_bed [\"direction\"=2,\"head_piece_bit\"=true]");
+  queue("setblock 8 66 -4 chest [\"minecraft:cardinal_direction\"=\"south\"]");
+  queue("setblock 10 66 4 crafting_table");
+  queue("setblock 6 67 6 oak_door [\"direction\"=0]");
+  queue("setblock 6 68 6 oak_door [\"direction\"=0,\"upper_block_bit\"=true]");
+}
+
+function buildShop(x, z, wall, roof) {
+  queue(`fill ${x} 66 ${z} ${x + 8} 66 ${z + 8} oak_planks`);
+  queue(`fill ${x} 67 ${z} ${x + 8} 70 ${z + 8} ${wall} hollow`);
+  queue(`fill ${x - 1} 71 ${z - 1} ${x + 9} 71 ${z + 9} ${roof}`);
+  queue(`setblock ${x + 4} 67 ${z + 8} oak_door [\"direction\"=0]`);
+  queue(`setblock ${x + 4} 68 ${z + 8} oak_door [\"direction\"=0,\"upper_block_bit\"=true]`);
+  queue(`fill ${x + 1} 68 ${z + 8} ${x + 2} 69 ${z + 8} glass`);
+  queue(`fill ${x + 6} 68 ${z + 8} ${x + 7} 69 ${z + 8} glass`);
+  queue(`setblock ${x + 2} 67 ${z + 3} chest`);
+  queue(`setblock ${x + 6} 67 ${z + 3} barrel`);
+  queue(`setblock ${x + 1} 70 ${z + 1} lantern`);
+}
+
+function buildHouse(x, z, wall, roof) {
+  queue(`fill ${x} 66 ${z} ${x + 8} 66 ${z + 8} oak_planks`);
+  queue(`fill ${x} 67 ${z} ${x + 8} 70 ${z + 8} ${wall} hollow`);
+  queue(`fill ${x - 1} 71 ${z - 1} ${x + 9} 71 ${z + 9} ${roof}`);
+  queue(`setblock ${x + 4} 67 ${z + 8} oak_door [\"direction\"=0]`);
+  queue(`setblock ${x + 4} 68 ${z + 8} oak_door [\"direction\"=0,\"upper_block_bit\"=true]`);
+  queue(`fill ${x + 1} 68 ${z + 8} ${x + 2} 69 ${z + 8} glass`);
+  queue(`fill ${x + 6} 68 ${z + 8} ${x + 7} 69 ${z + 8} glass`);
+  queue(`setblock ${x + 2} 67 ${z + 2} red_bed [\"direction\"=2]`);
+  queue(`setblock ${x + 3} 67 ${z + 2} red_bed [\"direction\"=2,\"head_piece_bit\"=true]`);
+  queue(`setblock ${x + 6} 67 ${z + 3} chest`);
+  queue(`setblock ${x + 1} 70 ${z + 1} lantern`);
+}
+
 function buildResort() {
   if (resortBuilt) {
     return;
@@ -85,6 +159,14 @@ function buildResort() {
   queue("fill -48 61 -48 48 64 48 sand");
   queue("fill -39 65 -39 39 65 39 sand");
   queue("fill -30 66 -28 30 66 28 grass_block");
+  queue("fill -96 58 -96 96 58 96 sandstone");
+  queue("fill -96 59 -96 96 64 96 water");
+  queue("fill -74 59 -74 74 64 sand");
+  queue("fill -68 65 -68 68 65 sand");
+  queue("fill -60 66 -60 60 66 grass_block");
+  queue("fill -6 66 -64 6 66 64 stone_bricks");
+  queue("fill -64 66 20 64 66 23 stone_bricks");
+  queue("fill 30 66 -2 66 66 2 stone_bricks");
   queue("fill -14 64 -12 18 78 16 air");
   queue("fill -12 65 -10 16 65 14 smooth_quartz");
   queue("fill -12 66 -10 16 72 14 smooth_quartz hollow");
@@ -122,6 +204,16 @@ function buildResort() {
   queue("fill -16 65 -6 20 65 -4 stone_bricks");
   queue("fill 20 65 -4 31 65 7 stone_bricks");
   queue("fill -44 64 -44 44 64 44 seagrass replace water");
+  queue("fill -88 64 -88 88 64 88 seagrass replace water");
+
+  buildHotel();
+  buildShop(34, -20, "brick_block", "red_concrete");
+  buildShop(45, -20, "oak_planks", "green_concrete");
+  buildShop(56, -20, "cyan_concrete", "blue_concrete");
+  buildHouse(-54, 24, "oak_planks", "dark_oak_planks");
+  buildHouse(-42, 24, "birch_planks", "spruce_planks");
+  buildHouse(36, 24, "spruce_planks", "red_concrete");
+  buildHouse(48, 24, "acacia_planks", "orange_concrete");
 
   for (const [x, z] of PALMS) {
     buildPalm(x, z);
@@ -134,9 +226,9 @@ function randomBetween(min, max) {
 
 function randomBeachLocation() {
   return {
-    x: randomBetween(-38, 38),
-    y: 66,
-    z: randomBetween(-38, 38),
+    x: randomBetween(-58, 58),
+    y: 67,
+    z: randomBetween(-58, 58),
   };
 }
 
@@ -145,18 +237,18 @@ function randomShallowWaterLocation() {
   const edge = randomBetween(-58, 58);
 
   if (side === 0) {
-    return { x: edge, y: 63, z: randomBetween(50, 67) };
+    return { x: edge, y: 63, z: randomBetween(76, 92) };
   }
 
   if (side === 1) {
-    return { x: edge, y: 63, z: randomBetween(-67, -50) };
+    return { x: edge, y: 63, z: randomBetween(-92, -76) };
   }
 
   if (side === 2) {
-    return { x: randomBetween(50, 67), y: 63, z: edge };
+    return { x: randomBetween(76, 92), y: 63, z: edge };
   }
 
-  return { x: randomBetween(-67, -50), y: 63, z: edge };
+  return { x: randomBetween(-92, -76), y: 63, z: edge };
 }
 
 function getTaggedEntities(dimension, tag) {
@@ -212,7 +304,7 @@ function maintainAnimals() {
   const overworld = world.getDimension("overworld");
   refillNamedAnimals(overworld, "Green Lizard", LIZARD_ID, 18, randomBeachLocation);
   refillNamedAnimals(overworld, "Chicken", "minecraft:chicken", 12, randomBeachLocation);
-  refillNamedAnimals(overworld, "Sting Ray", STINGRAY_ID, 8, randomShallowWaterLocation);
+  refillNamedAnimals(overworld, "Sting Ray", STINGRAY_ID, STINGRAY_COUNT, randomShallowWaterLocation);
   refillNamedAnimals(overworld, "Rainbow Fish", "minecraft:tropicalfish", 14, randomShallowWaterLocation);
   maintainStaff(overworld);
 }
