@@ -44,7 +44,7 @@ It uses renamed vanilla entities so the pack works without any other mods:
 - Twenty-four upper-floor guest rooms, each with its own door, exterior window, bed, desk, drawers, chairs, chest, and ceiling light.
 - Continuous illuminated hallways lead from every guest-room door to staircases connecting all five hotel floors.
 - Peaceful difficulty and disabled natural mob spawning prevent hostile mobs and animals from spawning inside the hotel. Cayman wildlife is kept outdoors.
-- A dock, beach stand, shops, villager houses, paths, palm trees, sand, and shallow water. Every hotel, shop, and house has a solid land foundation.
+- A wide, stepped sandy beach with no trees on the sand, plus a dock, beach stand, shops, villager houses, paths, inland palm trees, and shallow water. Every hotel, shop, and house has a solid land foundation.
 - Run `/function cayman_start` to rebuild the hotel-room start for the current player.
 - Run `/function cayman_reset_area` to clear the Cayman animals/staff and rebuild the start.
 

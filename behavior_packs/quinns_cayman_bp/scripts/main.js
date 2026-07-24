@@ -1,7 +1,7 @@
 import { system, world } from "@minecraft/server";
 
 const STARTED_TAG = "quinn_cayman_started";
-const BUILD_TAG = "quinn_cayman_build_1100";
+const BUILD_TAG = "quinn_cayman_build_1110";
 const FORCE_REBUILD_TAG = "quinn_cayman_force_rebuild";
 const ANIMAL_TAG = "quinn_cayman_animal";
 const STAFF_TAG = "quinn_cayman_staff";
@@ -30,14 +30,14 @@ const STAFF = [
 ];
 
 const PALMS = [
-  [-58, -52],
-  [-55, 48],
-  [55, -50],
-  [58, 46],
-  [-18, 48],
-  [20, 47],
-  [62, 8],
-  [-62, 8],
+  [-48, -32],
+  [-46, 32],
+  [46, -32],
+  [46, 32],
+  [-18, 44],
+  [18, 44],
+  [48, 8],
+  [-48, 8],
 ];
 
 function hasTag(entity, tag) {
@@ -355,12 +355,17 @@ function buildResort() {
   queue("kill @e[tag=quinn_cayman_dog]");
   queue("tickingarea add -80 0 -80 79 0 79 quinn_cayman_build true");
 
+  // Clear the prior resort so old trees and structures cannot remain on the new beach.
+  queueFill(-68, 67, -68, 68, 116, 68, "air");
+
   // Build the sea first, then replace its center with a solid island.
   queueFill(-80, 57, -80, 79, 57, 79, "sandstone");
   queueFill(-80, 58, -80, 79, 64, 79, "water");
   queueFill(-68, 58, -68, 68, 64, 68, "sandstone");
+  queueFill(-68, 64, -68, 68, 64, 68, "sand");
   queueFill(-64, 65, -64, 64, 65, 64, "sand");
-  queueFill(-58, 66, -58, 58, 66, 58, "grass_block");
+  queueFill(-58, 66, -58, 58, 66, 58, "sand");
+  queueFill(-50, 66, -50, 50, 66, 50, "grass_block");
 
   queue("fill -6 66 -64 6 66 64 stone_bricks");
   queue("fill -64 66 20 64 66 23 stone_bricks");
