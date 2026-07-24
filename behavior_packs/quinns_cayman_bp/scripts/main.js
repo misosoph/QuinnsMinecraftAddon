@@ -1,7 +1,7 @@
 import { system, world } from "@minecraft/server";
 
 const STARTED_TAG = "quinn_cayman_started";
-const BUILD_TAG = "quinn_cayman_build_180";
+const BUILD_TAG = "quinn_cayman_build_190";
 const FORCE_REBUILD_TAG = "quinn_cayman_force_rebuild";
 const ANIMAL_TAG = "quinn_cayman_animal";
 const STAFF_TAG = "quinn_cayman_staff";
@@ -11,6 +11,8 @@ const STINGRAY_ID = "quinns_cayman:stingray";
 const STINGRAY_COUNT = 48;
 const CENTER = { x: 0, y: 66, z: 0 };
 const HOTEL_ROOM = { x: 5.5, y: 68, z: -19.5 };
+const DOG_SPAWN = { x: 10.5, y: 67, z: 34.5 };
+const HOTEL_BOUNDS = { minX: -39, maxX: 39, minZ: -31, maxZ: 30 };
 const POPULATION_RADIUS = 110;
 const welcomedPlayers = new Set();
 let commandQueue = [];
@@ -128,13 +130,44 @@ function buildHotel() {
     }
 
     for (const doorX of guestRoomDoorX) {
-      queue(`setblock ${doorX} ${floorY + 1} -6 dark_oak_door [\"direction\"=0]`);
-      queue(`setblock ${doorX} ${floorY + 2} -6 dark_oak_door [\"direction\"=0,\"upper_block_bit\"=true]`);
       queue(`fill ${doorX - 3} ${floorY + 2} -28 ${doorX + 3} ${floorY + 4} -28 glass`);
       queue(`setblock ${doorX - 3} ${floorY + 1} -23 red_bed [\"direction\"=2]`);
       queue(`setblock ${doorX - 2} ${floorY + 1} -23 red_bed [\"direction\"=2,\"head_piece_bit\"=true]`);
       queue(`setblock ${doorX + 3} ${floorY + 1} -23 chest [\"minecraft:cardinal_direction\"=\"south\"]`);
       queue(`setblock ${doorX} ${floorY + 6} -16 sea_lantern`);
+    }
+  }
+
+  // Continuous hallways connect every guest-room door to both stair wings.
+  for (const floorY of [72, 78, 84, 90]) {
+    queueFill(-35, floorY, -5, 35, floorY, 1, "polished_andesite");
+    queueFill(-35, floorY, 0, -22, floorY, 20, "polished_andesite");
+    queueFill(22, floorY, 0, 35, floorY, 20, "polished_andesite");
+
+    for (const torchX of [-32, -20, -8, 8, 20, 32]) {
+      queue(`setblock ${torchX} ${floorY + 1} 0 torch`);
+    }
+  }
+
+  // Matching stair flights connect floors 2-5 from both sides of the atrium.
+  for (const [floorY, stairStartZ] of [
+    [72, 5],
+    [78, 13],
+    [84, 5],
+  ]) {
+    for (const [minX, maxX] of [
+      [-32, -30],
+      [30, 32],
+    ]) {
+      queueFill(minX, floorY + 1, stairStartZ, maxX, floorY + 6, stairStartZ + 5, "air");
+
+      for (let step = 0; step < 6; step++) {
+        const stairZ = stairStartZ + step;
+        queueFill(minX, floorY, stairZ, maxX, floorY + step, stairZ, "smooth_quartz");
+      }
+
+      queue(`setblock ${minX} ${floorY + 1} ${stairStartZ - 1} torch`);
+      queue(`setblock ${minX} ${floorY + 7} ${stairStartZ + 6} torch`);
     }
   }
 
@@ -240,6 +273,27 @@ function buildHotel() {
   queue("setblock 12 67 -14 crafting_table");
   queue("setblock 7 67 -12 oak_door [\"direction\"=0]");
   queue("setblock 7 68 -12 oak_door [\"direction\"=0,\"upper_block_bit\"=true]");
+
+  // Place guest-room doors last so later wall, hallway, and stair work cannot cover them.
+  for (const floorY of [72, 78, 84, 90]) {
+    for (const doorX of guestRoomDoorX) {
+      queue(`setblock ${doorX} ${floorY + 1} -6 dark_oak_door [\"direction\"=0]`);
+      queue(`setblock ${doorX} ${floorY + 2} -6 dark_oak_door [\"direction\"=0,\"upper_block_bit\"=true]`);
+    }
+  }
+
+  for (const [torchX, torchZ] of [
+    [-18, 4],
+    [-18, 12],
+    [-18, 20],
+    [18, 4],
+    [18, 12],
+    [18, 20],
+    [-6, 22],
+    [6, 22],
+  ]) {
+    queue(`setblock ${torchX} 67 ${torchZ} torch`);
+  }
 }
 
 function buildShop(x, z, wall, roof) {
@@ -281,9 +335,11 @@ function buildResort() {
   resortBuilt = true;
 
   queue("gamerule mobgriefing false");
+  queue("gamerule doMobSpawning false");
   queue("difficulty peaceful");
   queue("setworldspawn 5 68 -19");
   queue("kill @e[tag=quinn_cayman_staff]");
+  queue("kill @e[tag=quinn_cayman_dog]");
   queue("tickingarea add -80 0 -80 79 0 79 quinn_cayman_build true");
 
   // Build the sea first, then replace its center with a solid island.
@@ -333,12 +389,29 @@ function randomBetween(min, max) {
   return min + Math.random() * (max - min);
 }
 
+function isInsideHotel(location) {
+  return (
+    location.x >= HOTEL_BOUNDS.minX &&
+    location.x <= HOTEL_BOUNDS.maxX &&
+    location.z >= HOTEL_BOUNDS.minZ &&
+    location.z <= HOTEL_BOUNDS.maxZ
+  );
+}
+
 function randomBeachLocation() {
-  return {
-    x: randomBetween(-58, 58),
-    y: 67,
-    z: randomBetween(-58, 58),
-  };
+  for (let attempt = 0; attempt < 24; attempt++) {
+    const location = {
+      x: randomBetween(-58, 58),
+      y: 67,
+      z: randomBetween(-58, 58),
+    };
+
+    if (!isInsideHotel(location)) {
+      return location;
+    }
+  }
+
+  return { x: -50, y: 67, z: -40 };
 }
 
 function randomShallowWaterLocation() {
@@ -409,13 +482,29 @@ function maintainStaff(dimension) {
   }
 }
 
+function moveAnimalsOutsideHotel(dimension) {
+  for (const entity of getTaggedEntities(dimension, ANIMAL_TAG)) {
+    if (!isInsideHotel(entity.location)) {
+      continue;
+    }
+
+    try {
+      entity.teleport(randomBeachLocation(), { dimension });
+    } catch (error) {
+      console.warn(`Could not move ${entity.nameTag || "Cayman animal"} out of the hotel.`);
+    }
+  }
+}
+
 function maintainAnimals() {
   if (commandQueue.length > 0) {
     return;
   }
 
   const overworld = world.getDimension("overworld");
+  runCommand(overworld, "gamerule doMobSpawning false");
   runCommand(overworld, "difficulty peaceful");
+  moveAnimalsOutsideHotel(overworld);
   refillNamedAnimals(overworld, "Green Lizard", LIZARD_ID, 18, randomBeachLocation);
   refillNamedAnimals(overworld, "Chicken", "minecraft:chicken", 12, randomBeachLocation);
   refillNamedAnimals(overworld, "Sting Ray", STINGRAY_ID, STINGRAY_COUNT, randomShallowWaterLocation);
@@ -425,17 +514,13 @@ function maintainAnimals() {
 
 function giveDog(player) {
   try {
-    const dog = player.dimension.spawnEntity("minecraft:wolf", {
-      x: HOTEL_ROOM.x + 1,
-      y: HOTEL_ROOM.y,
-      z: HOTEL_ROOM.z + 1,
-    });
+    const dog = player.dimension.spawnEntity("minecraft:wolf", DOG_SPAWN);
     dog.nameTag = "Quinn's Hotel Dog";
     dog.addTag(DOG_TAG);
 
-    if (!tryPlayerCommand(player, "tame @e[type=wolf,r=5,c=1]")) {
-      tryPlayerCommand(player, "event entity @e[type=wolf,r=5,c=1] minecraft:on_tame");
-      player.sendMessage("Your hotel dog is here. If it is not sitting, give it a bone to finish taming.");
+    if (!tryPlayerCommand(player, `tame @e[type=wolf,tag=${DOG_TAG},c=1]`)) {
+      tryPlayerCommand(player, `event entity @e[type=wolf,tag=${DOG_TAG},c=1] minecraft:on_tame`);
+      player.sendMessage("Your dog is waiting outside the grand entrance. If it is not sitting, give it a bone to finish taming.");
     }
   } catch (error) {
     player.sendMessage("The hotel dog tried to arrive, but Minecraft blocked the wolf spawn.");
