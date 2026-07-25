@@ -53,7 +53,7 @@ It uses renamed vanilla entities so the pack works without any other mods:
 A standalone rapid-fire weapon and automatic turret.
 Run `/function minigun_kit` to get the Minigun:
 
-- Hold the use button and release for a single flame shot.
+- Hold the use button and release for a single fire-charge shot.
 - Keep holding it to fire one shot every quarter second.
 - Use it on a block to place an automatic turret that targets nearby mobs.
 - The handheld icon and turret model use three parallel black barrels pointing in the same direction. The placed turret's barrel cluster spins continuously.
