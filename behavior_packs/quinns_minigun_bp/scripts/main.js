@@ -207,6 +207,26 @@ function findTurretTarget(turret) {
   }
 }
 
+function aimTurretAt(turret, targetLocation, origin) {
+  const delta = {
+    x: targetLocation.x - origin.x,
+    y: targetLocation.y - origin.y,
+    z: targetLocation.z - origin.z,
+  };
+  const horizontalDistance = Math.sqrt(delta.x * delta.x + delta.z * delta.z);
+  const pitch = -Math.atan2(delta.y, horizontalDistance) * 180 / Math.PI;
+  const yaw = Math.atan2(-delta.x, delta.z) * 180 / Math.PI;
+
+  try {
+    // The model's barrel cluster is its forward axis. Aim the entity first so
+    // its visual barrels and the direction used for the projectile agree.
+    turret.setRotation({ x: pitch, y: yaw });
+    return turret.getViewDirection();
+  } catch (error) {
+    return normalize(delta);
+  }
+}
+
 function fireTurret(turret) {
   const target = findTurretTarget(turret);
 
@@ -219,11 +239,7 @@ function fireTurret(turret) {
     y: turret.location.y + 0.65,
     z: turret.location.z,
   };
-  const direction = normalize({
-    x: getHeadLocation(target).x - origin.x,
-    y: getHeadLocation(target).y - origin.y,
-    z: getHeadLocation(target).z - origin.z,
-  });
+  const direction = aimTurretAt(turret, getHeadLocation(target), origin);
   const didFire = fireProjectile(turret.dimension, origin, direction, TURRET_SPEED, turret, TURRET_UNCERTAINTY);
 
   if (didFire) {
