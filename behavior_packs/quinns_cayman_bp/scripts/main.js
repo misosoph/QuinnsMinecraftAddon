@@ -1,10 +1,11 @@
 import { system, world } from "@minecraft/server";
 
 const STARTED_TAG = "quinn_cayman_started";
-const BUILD_TAG = "quinn_cayman_build_1130";
+const BUILD_TAG = "quinn_cayman_build_1140";
 const FORCE_REBUILD_TAG = "quinn_cayman_force_rebuild";
 const ANIMAL_TAG = "quinn_cayman_animal";
 const STAFF_TAG = "quinn_cayman_staff";
+const STAFF_SPAWNED_PROPERTY = "quinn_cayman:staff_spawned_1140";
 const DOG_TAG = "quinn_cayman_dog";
 const LIZARD_ID = "quinns_cayman:lizard";
 const STINGRAY_ID = "quinns_cayman:stingray";
@@ -17,6 +18,7 @@ const POPULATION_RADIUS = 110;
 const welcomedPlayers = new Set();
 let commandQueue = [];
 let resortBuilt = false;
+let staffSpawnedThisSession = false;
 
 const STAFF = [
   { name: "Front Desk Worker", x: 6.5, y: 67, z: 0.5 },
@@ -402,6 +404,13 @@ function buildResort() {
   }
 
   resortBuilt = true;
+  staffSpawnedThisSession = false;
+
+  try {
+    world.setDynamicProperty(STAFF_SPAWNED_PROPERTY, false);
+  } catch (error) {
+    console.warn("Could not reset the Cayman staff spawn marker.");
+  }
 
   queue("gamerule mobgriefing false");
   queue("gamerule doMobSpawning false");
@@ -543,15 +552,40 @@ function refillNamedAnimals(dimension, nameTag, typeId, desiredCount, locationFa
   }
 }
 
-function maintainStaff(dimension) {
-  const currentStaff = getTaggedEntities(dimension, STAFF_TAG);
+function spawnStaffOnce(dimension) {
+  if (staffSpawnedThisSession) {
+    return;
+  }
 
-  for (const staff of STAFF) {
-    if (currentStaff.some((entity) => entity.nameTag === staff.name)) {
-      continue;
+  try {
+    if (world.getDynamicProperty(STAFF_SPAWNED_PROPERTY) === true) {
+      staffSpawnedThisSession = true;
+      return;
     }
+  } catch (error) {
+    console.warn("Could not read the Cayman staff spawn marker.");
+  }
 
-    spawnNamedEntity(dimension, "minecraft:villager", staff.name, { x: staff.x, y: staff.y, z: staff.z }, STAFF_TAG);
+  let existingStaff = [];
+
+  try {
+    existingStaff = dimension.getEntities({ tags: [STAFF_TAG] });
+  } catch (error) {
+    console.warn("Could not check existing Cayman staff.");
+  }
+
+  if (existingStaff.length === 0) {
+    for (const staff of STAFF) {
+      spawnNamedEntity(dimension, "minecraft:villager", staff.name, { x: staff.x, y: staff.y, z: staff.z }, STAFF_TAG);
+    }
+  }
+
+  staffSpawnedThisSession = true;
+
+  try {
+    world.setDynamicProperty(STAFF_SPAWNED_PROPERTY, true);
+  } catch (error) {
+    console.warn("Could not save the Cayman staff spawn marker.");
   }
 }
 
@@ -582,7 +616,7 @@ function maintainAnimals() {
   refillNamedAnimals(overworld, "Chicken", "minecraft:chicken", 12, randomBeachLocation);
   refillNamedAnimals(overworld, "Sting Ray", STINGRAY_ID, STINGRAY_COUNT, randomShallowWaterLocation);
   refillNamedAnimals(overworld, "Rainbow Fish", "minecraft:tropicalfish", 14, randomShallowWaterLocation);
-  maintainStaff(overworld);
+  spawnStaffOnce(overworld);
 }
 
 function giveDog(player) {

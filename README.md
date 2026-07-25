@@ -38,7 +38,7 @@ It uses renamed vanilla entities so the pack works without any other mods:
 
 - Custom green lizards everywhere, with a low lizard body, legs, tail, and green spotted texture.
 - Chickens around the hotel grounds.
-- Five villagers named as front-desk, restaurant, shop, cleaning, and beach-tour workers.
+- Five villagers named as front-desk, restaurant, shop, cleaning, and beach-tour workers. They spawn once after the resort is built and are never automatically replaced.
 - Many custom sting rays with broad flat bodies, wide fins, and long tails, plus rainbow fish in the shallow water around the island.
 - A large hotel with a capacious five-storey atrium lobby, grand staircase, balconies, chandelier, eight-storey glass entrance tower with grand double doors, restaurant, and private spawn room.
 - Twenty-four upper-floor guest rooms, each with its own door, exterior window, bed, desk, drawers, chairs, chest, and ceiling light.
