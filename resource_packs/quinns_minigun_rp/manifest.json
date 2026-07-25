@@ -4,14 +4,14 @@
     "name": "Quinn's Minigun Add-On Resources",
     "description": "Black three-barrel minigun textures and spinning turret model.",
     "uuid": "e1a78a5d-5b61-42b9-a3c9-75e858011687",
-    "version": [1, 0, 0],
+    "version": [1, 0, 1],
     "min_engine_version": [1, 21, 60]
   },
   "modules": [
     {
       "type": "resources",
       "uuid": "f973178b-2b0d-482f-b7ec-1760c02a73e7",
-      "version": [1, 0, 0]
+      "version": [1, 0, 1]
     }
   ],
   "metadata": {

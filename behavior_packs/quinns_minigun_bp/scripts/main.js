@@ -2,8 +2,8 @@ import { system, world } from "@minecraft/server";
 
 const MINIGUN_ID = "quinns_minigun:minigun";
 const TURRET_ID = "quinns_minigun:minigun_turret";
-const PROJECTILE_ID = "quinns_minigun:fire_charge";
-const PROJECTILE_SOUND = "mob.blaze.shoot";
+const PROJECTILE_ID = "minecraft:arrow";
+const PROJECTILE_SOUND = "random.bow";
 const SHOT_INTERVAL_TICKS = 5;
 const TURRET_RANGE = 18;
 const HANDHELD_SPEED = 2.9;
@@ -172,7 +172,6 @@ function isTurretTarget(entity) {
     "minecraft:arrow",
     "minecraft:small_fireball",
     "minecraft:fireball",
-    "quinns_minigun:fire_charge",
     "minecraft:snowball",
   ].includes(entity.typeId)) {
     return false;

@@ -4,7 +4,7 @@
     "name": "Quinn's Minigun Add-On",
     "description": "A rapid-fire handheld minigun and an automatic placed turret.",
     "uuid": "0d2ca9ef-8c08-4f6d-8cb4-cb5d99d38e45",
-    "version": [1, 0, 0],
+    "version": [1, 0, 1],
     "min_engine_version": [1, 21, 60]
   },
   "modules": [
@@ -12,7 +12,7 @@
       "description": "Minigun behavior data",
       "type": "data",
       "uuid": "dfe05ed5-2df8-44bf-87e3-9e8b6ff6474a",
-      "version": [1, 0, 0]
+      "version": [1, 0, 1]
     },
     {
       "description": "Minigun firing script",
@@ -20,7 +20,7 @@
       "language": "javascript",
       "entry": "scripts/main.js",
       "uuid": "5d5a5b4c-fcd0-4e88-8850-1e26c3a4fce4",
-      "version": [1, 0, 0]
+      "version": [1, 0, 1]
     }
   ],
   "dependencies": [
@@ -30,7 +30,7 @@
     },
     {
       "uuid": "e1a78a5d-5b61-42b9-a3c9-75e858011687",
-      "version": [1, 0, 0]
+      "version": [1, 0, 1]
     }
   ],
   "metadata": {
