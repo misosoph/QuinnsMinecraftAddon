@@ -2,7 +2,8 @@ import { system, world } from "@minecraft/server";
 
 const MINIGUN_ID = "quinns_minigun:minigun";
 const TURRET_ID = "quinns_minigun:minigun_turret";
-const PROJECTILE_ID = "minecraft:arrow";
+const PROJECTILE_ID = "minecraft:small_fireball";
+const PROJECTILE_SOUND = "mob.blaze.shoot";
 const SHOT_INTERVAL_TICKS = 5;
 const TURRET_RANGE = 18;
 const HANDHELD_SPEED = 2.9;
@@ -104,7 +105,7 @@ function fireHandheld(player) {
   }
 
   try {
-    player.runCommand("playsound random.bow @s");
+    player.runCommand(`playsound ${PROJECTILE_SOUND} @s`);
   } catch (error) {
     // The projectile still fires if the optional sound is unavailable.
   }
@@ -169,6 +170,8 @@ function isTurretTarget(entity) {
     "minecraft:item",
     "minecraft:xp_orb",
     "minecraft:arrow",
+    "minecraft:small_fireball",
+    "minecraft:fireball",
     "minecraft:snowball",
   ].includes(entity.typeId)) {
     return false;
@@ -245,7 +248,7 @@ function fireTurret(turret) {
   if (didFire) {
     try {
       turret.dimension.runCommand(
-        `playsound random.bow @a ${Math.floor(turret.location.x)} ${Math.floor(turret.location.y)} ${Math.floor(turret.location.z)}`,
+        `playsound ${PROJECTILE_SOUND} @a ${Math.floor(turret.location.x)} ${Math.floor(turret.location.y)} ${Math.floor(turret.location.z)}`,
       );
     } catch (error) {
       // The automatic turret remains functional if the optional sound fails.
