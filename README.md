@@ -55,6 +55,7 @@ Run `/function minigun_kit` to get the Minigun:
 
 - Hold the use button and release for a single arrow shot. The arrow is rendered as a short stick.
 - Keep holding it to fire one shot every quarter second.
+- Minigun projectiles use a metallic stick model, point along their travel direction, and explode on impact.
 - Use it on a block to place an automatic turret that targets nearby mobs.
 - The handheld icon and turret model use three parallel black barrels pointing in the same direction. The placed turret's barrel cluster spins continuously.
 

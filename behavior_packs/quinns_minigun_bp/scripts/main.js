@@ -8,11 +8,13 @@ const SHOT_INTERVAL_TICKS = 5;
 const TURRET_RANGE = 18;
 const HANDHELD_SPEED = 2.9;
 const TURRET_SPEED = 2.6;
-const TURRET_UNCERTAINTY = 1.25;
+const TURRET_UNCERTAINTY = 0;
+const PROJECTILE_EXPLOSION_RADIUS = 1.5;
 const DIMENSION_IDS = ["overworld", "nether", "the_end"];
 
 const activeUsers = new Map();
 const lastTurretShots = new Map();
+const trackedProjectiles = new Map();
 const welcomedPlayers = new Set();
 
 function isMinigun(itemStack) {
@@ -62,6 +64,18 @@ function multiplyVector(vector, amount) {
   };
 }
 
+function getRotationFromDirection(direction) {
+  const normalizedDirection = normalize(direction);
+  const horizontalDistance = Math.sqrt(
+    normalizedDirection.x * normalizedDirection.x + normalizedDirection.z * normalizedDirection.z,
+  );
+
+  return {
+    x: -Math.atan2(normalizedDirection.y, horizontalDistance) * 180 / Math.PI,
+    y: Math.atan2(-normalizedDirection.x, normalizedDirection.z) * 180 / Math.PI,
+  };
+}
+
 function getHeadLocation(entity) {
   try {
     return entity.getHeadLocation();
@@ -89,6 +103,19 @@ function fireProjectile(dimension, location, direction, speed, owner, uncertaint
       projectile.applyImpulse(multiplyVector(normalizedDirection, speed));
     }
 
+    try {
+      // Keep the short metal model aligned with the exact launch direction.
+      projectile.setRotation(getRotationFromDirection(normalizedDirection));
+    } catch (error) {
+      // Vanilla projectile rotation remains a safe fallback if unavailable.
+    }
+
+    trackedProjectiles.set(projectile.id, {
+      projectile,
+      owner,
+      spawnedTick: system.currentTick,
+    });
+
     return true;
   } catch (error) {
     return false;
@@ -98,7 +125,7 @@ function fireProjectile(dimension, location, direction, speed, owner, uncertaint
 function fireHandheld(player) {
   const direction = player.getViewDirection();
   const origin = getHeadLocation(player);
-  const didFire = fireProjectile(player.dimension, origin, direction, HANDHELD_SPEED, player, 1.6);
+  const didFire = fireProjectile(player.dimension, origin, direction, HANDHELD_SPEED, player, 0);
 
   if (!didFire) {
     return false;
@@ -258,6 +285,52 @@ function fireTurret(turret) {
   return didFire;
 }
 
+function explodeTrackedProjectile(event) {
+  const projectile = event.projectile;
+  const state = trackedProjectiles.get(projectile.id);
+
+  if (!state) {
+    return;
+  }
+
+  trackedProjectiles.delete(projectile.id);
+  const explosionOptions = {
+    breaksBlocks: true,
+    causesFire: false,
+  };
+
+  try {
+    if (state.owner?.isValid) {
+      explosionOptions.source = state.owner;
+    }
+  } catch (error) {
+    // The explosion still works if its original owner is no longer valid.
+  }
+
+  try {
+    event.dimension.createExplosion(event.location, PROJECTILE_EXPLOSION_RADIUS, explosionOptions);
+  } catch (error) {
+    // Keep the projectile event from interrupting the firing loop.
+  }
+}
+
+function subscribeProjectileEvents() {
+  world.afterEvents.projectileHitBlock?.subscribe(explodeTrackedProjectile);
+  world.afterEvents.projectileHitEntity?.subscribe(explodeTrackedProjectile);
+}
+
+function cleanTrackedProjectiles() {
+  for (const [projectileId, state] of trackedProjectiles) {
+    try {
+      if (!state.projectile.isValid || system.currentTick - state.spawnedTick > 1200) {
+        trackedProjectiles.delete(projectileId);
+      }
+    } catch (error) {
+      trackedProjectiles.delete(projectileId);
+    }
+  }
+}
+
 function updateTurrets() {
   const activeTurretIds = new Set();
 
@@ -328,8 +401,10 @@ function welcomePlayers() {
 }
 
 subscribeUseEvents();
+subscribeProjectileEvents();
 system.runInterval(() => {
   welcomePlayers();
   updateHandheldUsers();
   updateTurrets();
+  cleanTrackedProjectiles();
 }, 1);

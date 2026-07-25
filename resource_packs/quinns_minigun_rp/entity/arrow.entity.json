@@ -7,7 +7,7 @@
         "default": "entity_alphatest"
       },
       "textures": {
-        "default": "textures/items/stick"
+        "default": "textures/items/iron_ingot"
       },
       "geometry": {
         "default": "geometry.quinns_minigun_arrow"
