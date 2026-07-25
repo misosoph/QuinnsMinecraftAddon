@@ -1,0 +1,13 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.quinns_minigun_turret.spin": {
+      "loop": true,
+      "bones": {
+        "barrel_cluster": {
+          "rotation": [0, 0, "query.life_time * 720"]
+        }
+      }
+    }
+  }
+}

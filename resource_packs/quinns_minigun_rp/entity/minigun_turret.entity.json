@@ -1,0 +1,26 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "quinns_minigun:minigun_turret",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/quinns_minigun_turret"
+      },
+      "geometry": {
+        "default": "geometry.quinns_minigun_turret"
+      },
+      "animations": {
+        "spin": "animation.quinns_minigun_turret.spin"
+      },
+      "scripts": {
+        "animate": ["spin"]
+      },
+      "render_controllers": [
+        "controller.render.default"
+      ]
+    }
+  }
+}

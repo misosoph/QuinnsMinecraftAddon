@@ -48,6 +48,16 @@ It uses renamed vanilla entities so the pack works without any other mods:
 - Run `/function cayman_start` to rebuild the hotel-room start for the current player.
 - Run `/function cayman_reset_area` to clear the Cayman animals/staff and rebuild the start.
 
+### Quinn's Minigun Add-On
+
+A standalone rapid-fire weapon and automatic turret.
+Run `/function minigun_kit` to get the Minigun:
+
+- Hold the use button and release for a single arrow shot.
+- Keep holding it to fire one shot every quarter second.
+- Use it on a block to place an automatic turret that targets nearby mobs.
+- The handheld icon and turret model use three parallel black barrels pointing in the same direction. The placed turret's barrel cluster spins continuously.
+
 ## Files
 
 ```text
@@ -73,6 +83,14 @@ QuinnsMinecraftAddon
 |       |   `-- cayman_start.mcfunction
 |       `-- scripts
 |           `-- main.js
+|   `-- quinns_minigun_bp
+|       |-- manifest.json
+|       |-- entities
+|       |-- items
+|       |-- functions
+|       |   `-- minigun_kit.mcfunction
+|       `-- scripts
+|           `-- main.js
 |-- resource_packs
 |   |-- quinns_enderstorm_rp
 |   |   |-- manifest.json
@@ -84,6 +102,14 @@ QuinnsMinecraftAddon
 |           `-- en_US.lang
 |   `-- quinns_cayman_rp
 |       |-- manifest.json
+|       `-- texts
+|           `-- en_US.lang
+|   `-- quinns_minigun_rp
+|       |-- manifest.json
+|       |-- animations
+|       |-- entity
+|       |-- models
+|       |-- textures
 |       `-- texts
 |           `-- en_US.lang
 |-- scripts
@@ -123,6 +149,9 @@ This creates:
 - `dist/quinns-cayman-islands.mcaddon`
 - `dist/quinns-cayman-islands-bp.mcpack`
 - `dist/quinns-cayman-islands-rp.mcpack`
+- `dist/quinns-minigun.mcaddon`
+- `dist/quinns-minigun-bp.mcpack`
+- `dist/quinns-minigun-rp.mcpack`
 
 > Note: do not commit packaged binaries to pull requests if your PR workflow
 > rejects binary files. This repo ignores `dist/*.mcaddon` and publishes the
@@ -174,6 +203,11 @@ under Resource Packs and `Quinn's Cayman Islands Add-On` under Behavior Packs.
 When you enter the world, the script moves you into a hotel room, gives you a
 tamed dog, builds the Cayman resort area, and keeps the animals and workers
 populated near spawn.
+
+For Quinn's Minigun Add-On, activate `Quinn's Minigun Add-On Resources` under
+Resource Packs and `Quinn's Minigun Add-On` under Behavior Packs. Run
+`/function minigun_kit`, hold the Minigun's use button, and use it on a block to
+place the automatic turret.
 
 ### Updating Quinn's Security Add-On
 

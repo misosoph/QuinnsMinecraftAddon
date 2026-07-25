@@ -24,6 +24,12 @@ $addons = @(
     ResourcePackName = "quinns_cayman_rp"
     BehaviorDisplayName = "Quinn's Cayman Islands Add-On"
     ResourceDisplayName = "Quinn's Cayman Islands Resources"
+  },
+  @{
+    BehaviorPackName = "quinns_minigun_bp"
+    ResourcePackName = "quinns_minigun_rp"
+    BehaviorDisplayName = "Quinn's Minigun Add-On"
+    ResourceDisplayName = "Quinn's Minigun Add-On Resources"
   }
 )
 

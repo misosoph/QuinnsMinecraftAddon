@@ -1,0 +1,9 @@
+{
+  "resource_pack_name": "quinns_minigun_rp",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "quinns_minigun": {
+      "textures": "textures/items/quinns_minigun"
+    }
+  }
+}

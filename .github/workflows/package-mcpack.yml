@@ -48,3 +48,13 @@ jobs:
             dist/quinns-cayman-islands-bp.mcpack
             dist/quinns-cayman-islands-rp.mcpack
           if-no-files-found: error
+
+      - name: Upload Minigun Add-On artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: quinns-minigun-addon
+          path: |
+            dist/quinns-minigun.mcaddon
+            dist/quinns-minigun-bp.mcpack
+            dist/quinns-minigun-rp.mcpack
+          if-no-files-found: error
