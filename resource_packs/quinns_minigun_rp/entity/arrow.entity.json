@@ -7,7 +7,7 @@
         "default": "entity_alphatest"
       },
       "textures": {
-        "default": "textures/items/iron_ingot"
+        "default": "textures/entity/quinns_minigun_turret"
       },
       "geometry": {
         "default": "geometry.quinns_minigun_arrow"
