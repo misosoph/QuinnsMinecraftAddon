@@ -29,6 +29,12 @@ $addons = @(
     StagingName = "quinns-minigun-addon"
     BehaviorPackName = "quinns_minigun_bp"
     ResourcePackName = "quinns_minigun_rp"
+  },
+  @{
+    PackageName = "quinns-craftable-gear"
+    StagingName = "quinns-craftable-gear-addon"
+    BehaviorPackName = "quinns_craftable_gear_bp"
+    ResourcePackName = "quinns_craftable_gear_rp"
   }
 )
 

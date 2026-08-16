@@ -1,0 +1,29 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "quinns_craftable_gear:trident"
+    },
+    "tags": ["crafting_table"],
+    "pattern": [
+      "QQQ",
+      ".B.",
+      ".S."
+    ],
+    "key": {
+      "Q": {
+        "item": "minecraft:quartz"
+      },
+      "B": {
+        "item": "minecraft:blue_dye"
+      },
+      "S": {
+        "item": "minecraft:stick"
+      }
+    },
+    "result": {
+      "item": "minecraft:trident",
+      "count": 1
+    }
+  }
+}

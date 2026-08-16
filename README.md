@@ -59,6 +59,13 @@ Run `/function minigun_kit` to get the Minigun:
 - Use it on a block to place an automatic turret that targets nearby mobs.
 - The handheld icon and turret model use three parallel black barrels pointing in the same direction. The placed turret's barrel cluster spins continuously.
 
+### Quinn's Craftable Gear Add-On
+
+A standalone behavior/resource pack that adds shaped crafting recipes for:
+
+- Trident: three quartz across the top row, blue dye in the center, and a stick in the bottom-center slot.
+- Elytra: redstone dust in the center and sand in the bottom-center slot.
+
 ## Files
 
 ```text
@@ -153,6 +160,9 @@ This creates:
 - `dist/quinns-minigun.mcaddon`
 - `dist/quinns-minigun-bp.mcpack`
 - `dist/quinns-minigun-rp.mcpack`
+- `dist/quinns-craftable-gear.mcaddon`
+- `dist/quinns-craftable-gear-bp.mcpack`
+- `dist/quinns-craftable-gear-rp.mcpack`
 
 > Note: do not commit packaged binaries to pull requests if your PR workflow
 > rejects binary files. This repo ignores `dist/*.mcaddon` and publishes the
@@ -162,7 +172,7 @@ This creates:
 
 1. Open the **Actions** tab in GitHub.
 2. Run **Package Minecraft Add-on** (or open any recent run on your branch/PR).
-3. Download the **quinns-cayman-islands-addon** artifact for the Cayman Islands add-on, or download one of the other add-on artifacts.
+3. Download the **quinns-craftable-gear-addon** artifact for the Craftable Gear add-on, or download one of the other add-on artifacts.
 4. Extract the downloaded GitHub artifact ZIP.
 5. Open the matching `.mcaddon` file from the extracted folder in Minecraft.
 6. If the combined file does not install both packs, open

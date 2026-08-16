@@ -1,0 +1,21 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Quinn's Craftable Gear Add-On",
+    "description": "Craft a trident and an elytra from simple materials.",
+    "uuid": "8d4a5f9e-4c2d-4e3b-9a17-6f2c8b1d0e54",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 21, 60]
+  },
+  "modules": [
+    {
+      "description": "Craftable gear recipes",
+      "type": "data",
+      "uuid": "2f7c1a64-8b93-4d0e-a526-7e9b3c8d1f42",
+      "version": [1, 0, 0]
+    }
+  ],
+  "metadata": {
+    "authors": ["Quinn"]
+  }
+}
