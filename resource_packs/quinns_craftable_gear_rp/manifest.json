@@ -4,14 +4,14 @@
     "name": "Quinn's Craftable Gear Add-On Resources",
     "description": "Resources for Quinn's craftable gear recipes.",
     "uuid": "b1e7d3a9-6c42-4f85-8d10-2a9c5e7b4f63",
-    "version": [1, 0, 0],
+    "version": [1, 0, 1],
     "min_engine_version": [1, 21, 60]
   },
   "modules": [
     {
       "type": "resources",
       "uuid": "c5a8f2d4-9b31-46e7-a05c-3d8f1b6e2a79",
-      "version": [1, 0, 0]
+      "version": [1, 0, 1]
     }
   ],
   "metadata": {
