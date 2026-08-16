@@ -7,8 +7,8 @@
     "tags": ["crafting_table"],
     "pattern": [
       "QQQ",
-      ".B.",
-      ".S."
+      " B ",
+      " S "
     ],
     "key": {
       "Q": {
