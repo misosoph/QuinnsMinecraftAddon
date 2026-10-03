@@ -1,0 +1,59 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Quinn's Mine Some Dirt",
+    "description": "Break dirt for random Minecraft items, potions, and enchanted treasure.",
+    "uuid": "5201bce8-b3be-4c9a-af23-63fa4057403a",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      60
+    ]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "33f02a93-1abb-43c8-aa29-8e94a248059b",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "script",
+      "language": "javascript",
+      "entry": "scripts/main.js",
+      "uuid": "d29fb09c-c930-418e-a6f6-66f0dcd7a39b",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "1.17.0"
+    },
+    {
+      "uuid": "d05d835f-83e7-48a0-81b2-a026fd22b935",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "metadata": {
+    "authors": [
+      "Quinn"
+    ]
+  }
+}

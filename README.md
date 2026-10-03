@@ -66,6 +66,16 @@ A standalone behavior/resource pack that adds shaped crafting recipes for:
 - Trident: three quartz across the top row, blue dye in the center, and a stick in the bottom-center slot.
 - Elytra: redstone dust in the center and sand in the bottom-center slot.
 
+### Quinn's Mine Some Dirt (v1.0.0)
+
+Activate **Quinn's Mine Some Dirt Resources** and **Quinn's Mine Some Dirt** in a Bedrock 1.21.60+ world. No experimental features are required.
+
+- Break dirt, grass blocks, coarse dirt, or rooted dirt by hand or with any tool to get one bonus prize at the broken block, alongside normal dirt drops. Works in Survival and Creative, including placed dirt and Silk Touch.
+- 80% of prizes draw from all vanilla item types that the installed game can create as item stacks: blocks, weapons, food, spawn eggs, rare treasure, and more. Air and non-item entities cannot be dropped. Enchantable prizes have a 50% chance of a compatible random enchantment.
+- 10% of prizes are random drinking, splash, or lingering potions (including extended/strong effects); 10% are enchanted tools, weapons, armor, or books, with treasure enchantments allowed.
+- Run `/function mine_some_dirt_kit` with cheats enabled for 64 dirt and a shovel. Mining itself does not require cheats. Explosions and command-based block removal do not trigger the player mining bonus.
+- Download **quinns-mine-some-dirt-addon-v1** from GitHub Actions, extract the ZIP, and open `quinns-mine-some-dirt.mcaddon`. Separate BP/RP imports are included. Both manifests start at version `1.0.0` with unique UUIDs.
+
 ## Files
 
 ```text
@@ -163,6 +173,9 @@ This creates:
 - `dist/quinns-craftable-gear.mcaddon`
 - `dist/quinns-craftable-gear-bp.mcpack`
 - `dist/quinns-craftable-gear-rp.mcpack`
+- `dist/quinns-mine-some-dirt.mcaddon`
+- `dist/quinns-mine-some-dirt-bp.mcpack`
+- `dist/quinns-mine-some-dirt-rp.mcpack`
 
 > Note: do not commit packaged binaries to pull requests if your PR workflow
 > rejects binary files. This repo ignores `dist/*.mcaddon` and publishes the

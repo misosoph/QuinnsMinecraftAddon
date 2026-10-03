@@ -35,6 +35,12 @@ $addons = @(
     StagingName = "quinns-craftable-gear-addon"
     BehaviorPackName = "quinns_craftable_gear_bp"
     ResourcePackName = "quinns_craftable_gear_rp"
+  },
+  @{
+    PackageName = "quinns-mine-some-dirt"
+    StagingName = "quinns-mine-some-dirt-addon"
+    BehaviorPackName = "quinns_mine_some_dirt_bp"
+    ResourcePackName = "quinns_mine_some_dirt_rp"
   }
 )
 
