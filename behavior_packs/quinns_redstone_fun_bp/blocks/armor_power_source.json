@@ -1,0 +1,44 @@
+{
+  "format_version": "1.21.120",
+  "minecraft:block": {
+    "description": {
+      "identifier": "quinns_redstone_fun:armor_power_source"
+    },
+    "components": {
+      "minecraft:geometry": {
+        "identifier": "geometry.quinns_redstone_fun.invisible_power",
+        "bone_visibility": {
+          "root": false
+        }
+      },
+      "minecraft:collision_box": false,
+      "minecraft:selection_box": false,
+      "minecraft:light_dampening": 0,
+      "minecraft:destructible_by_mining": false,
+      "minecraft:destructible_by_explosion": false,
+      "minecraft:replaceable": {},
+      "minecraft:movable": {
+        "movement_type": "popped"
+      },
+      "minecraft:loot": "loot_tables/empty.json",
+      "minecraft:redstone_producer": {
+        "power": 15,
+        "strongly_powered_face": "down",
+        "connected_faces": [
+          "up",
+          "down",
+          "north",
+          "south",
+          "east",
+          "west"
+        ]
+      },
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "redstone_block",
+          "render_method": "alpha_test"
+        }
+      }
+    }
+  }
+}

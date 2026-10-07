@@ -80,12 +80,14 @@ jobs:
           if-no-files-found: error
 
       - name: Validate Redstone Fun
-        run: node tests/redstone-fun.test.cjs
+        run: |
+          node tests/redstone-fun.test.cjs
+          node tests/redstone-fun-v2.test.cjs
 
-      - name: Upload Redstone Fun v1 artifact
+      - name: Upload Redstone Fun v2 artifact
         uses: actions/upload-artifact@v4
         with:
-          name: quinns-redstone-fun-addon-v1
+          name: quinns-redstone-fun-addon-v2
           path: |
             dist/quinns-redstone-fun.mcaddon
             dist/quinns-redstone-fun-bp.mcpack

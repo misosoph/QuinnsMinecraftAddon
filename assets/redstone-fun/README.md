@@ -24,3 +24,21 @@ Prompt:
 The generated atlas is 2172x724; each production icon uses a centered 543x543
 crop from its corresponding quarter. The worn armor instead reuses vanilla
 diamond geometry and textures with the native render-controller color tint.
+
+## v2 sword icon
+
+`sword-icon-source.png` was created with the built-in imagegen tool using Mojang's
+diamond sword icon as the edit reference, then resized to 32x32 with nearest-neighbor
+sampling. The production image is
+`resource_packs/quinns_redstone_fun_rp/textures/items/redstone_sword.png`.
+
+Prompt:
+
+> Use case: precise-object-edit. Edit target: supplied Minecraft diamond sword
+> inventory icon. Change only the cyan/teal diamond blade to bright red/redstone
+> crimson. Preserve the simple vanilla pixel-art sword silhouette, dark handle,
+> diagonal blade pointing up and right, shading, and transparent background.
+> Single centered inventory icon in a square canvas, equal transparent margin
+> all sides. Crisp low-resolution pixel art, no glow, no decoration, no text,
+> no extra objects. This is the Redstone Sword for Quinn's Redstone Fun Minecraft
+> Bedrock add-on. The output will be resized to 32x32 pixels.

@@ -50,7 +50,7 @@ function setup() {
     getComponent: id => id === "minecraft:inventory" ? { container: inventory } : { getEquipment: slot => equipment[slot] },
     sendMessage: () => {}, getEffect: () => existingEffect, addEffect: (...args) => effects.push(args),
   };
-  vm.runInNewContext(fs.readFileSync(`${bp}/scripts/main.js`, "utf8").replace(/^import .*;\r?\n/, ""), {
+  vm.runInNewContext(fs.readFileSync(`${bp}/scripts/main.js`, "utf8").replace(/^import .*;\r?\n/gm, ""), {
     ItemStack, EquipmentSlot: { Head: "Head", Chest: "Chest", Legs: "Legs", Feet: "Feet" }, console: { warn: () => {} },
     world: { beforeEvents: { playerInteractWithBlock: { subscribe: fn => { interaction = fn; } } }, getAllPlayers: () => [player] },
     system: { run: fn => queue.push(fn), runInterval: (fn, ticks) => { interval = fn; assert.equal(ticks, 10); } },
@@ -130,7 +130,7 @@ for (const reason of ["no comparator", "changed selection", "removed anvil", "bu
 }
 
 const manifests = [bp, rp].map(pack => JSON.parse(fs.readFileSync(`${pack}/manifest.json`)));
-assert.deepEqual(manifests[0].header.version, [1, 0, 0]);
+assert.deepEqual(manifests[0].header.version, [2, 0, 0]);
 assert.equal(manifests[0].dependencies[1].uuid, manifests[1].header.uuid);
 const atlas = JSON.parse(fs.readFileSync(`${rp}/textures/item_texture.json`));
 for (const icon of Object.values(atlas.texture_data)) assert.ok(fs.existsSync(path.join(rp, icon.textures + ".png")), "inventory icon exists");

@@ -2,17 +2,17 @@
   "format_version": 2,
   "header": {
     "name": "Quinn's Redstone Fun Resources",
-    "description": "Red diamond-style armor with 5 protection per piece, 9000 durability, and powered-redstone speed.",
+    "description": "Redstone-powered armor and an unbreakable, instant-kill sword with 100-dust circuit discharges.",
     "uuid": "c7adec90-93b4-4e90-9068-f55aec16ccc1",
     "version": [
-      1,
+      2,
       0,
       0
     ],
     "min_engine_version": [
       1,
       21,
-      60
+      120
     ]
   },
   "modules": [
@@ -20,7 +20,7 @@
       "type": "resources",
       "uuid": "99b1e84f-2556-42e9-b628-e4d7d3b66b6e",
       "version": [
-        1,
+        2,
         0,
         0
       ]

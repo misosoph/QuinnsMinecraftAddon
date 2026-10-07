@@ -1,8 +1,10 @@
 import { world, system, ItemStack, EquipmentSlot } from "@minecraft/server";
+import "./redstone_mechanics.js";
 
 const PREFIX = "quinns_redstone_fun:redstone_";
 const ANVILS = new Set(["minecraft:anvil", "minecraft:chipped_anvil", "minecraft:damaged_anvil"]);
 const PIECES = new Set(["helmet", "chestplate", "leggings", "boots"]);
+const UPGRADABLE = new Set([...PIECES, "sword"]);
 const ARMOR_SLOTS = [EquipmentSlot.Head, EquipmentSlot.Chest, EquipmentSlot.Legs, EquipmentSlot.Feet];
 const pendingConversions = new Set();
 const RANGE = 4;
@@ -18,7 +20,7 @@ offsets.sort((a, b) => a.x * a.x + a.y * a.y + a.z * a.z - b.x * b.x - b.y * b.y
 
 function diamondPiece(typeId) {
   const piece = typeId?.replace("minecraft:diamond_", "");
-  return typeId?.startsWith("minecraft:diamond_") && PIECES.has(piece) ? piece : undefined;
+  return typeId?.startsWith("minecraft:diamond_") && UPGRADABLE.has(piece) ? piece : undefined;
 }
 
 function convertArmor(player, slot, piece, dimension, location) {

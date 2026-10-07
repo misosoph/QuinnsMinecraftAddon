@@ -13,6 +13,9 @@
     },
     "quinns_redstone_boots": {
       "textures": "textures/items/redstone_boots"
+    },
+    "quinns_redstone_sword": {
+      "textures": "textures/items/redstone_sword"
     }
   }
 }

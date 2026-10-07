@@ -76,59 +76,82 @@ Activate **Quinn's Mine Some Dirt Resources** and **Quinn's Mine Some Dirt** in 
 - Run `/function mine_some_dirt_kit` with cheats enabled for 64 dirt and a shovel. Mining itself does not require cheats. Explosions and command-based block removal do not trigger the player mining bonus.
 - Download **quinns-mine-some-dirt-addon-v1** from GitHub Actions, extract the ZIP, and open `quinns-mine-some-dirt.mcaddon`. Separate BP/RP imports are included. Both manifests start at version `1.0.0` with unique UUIDs.
 
-### Quinn's Redstone Fun (v1.0.0)
+### Quinn's Redstone Fun (v2.0.0)
 
 Activate **Quinn's Redstone Fun Resources** and **Quinn's Redstone Fun** in a
-Minecraft Bedrock 1.21.60+ world. No experimental features are required.
+Minecraft Bedrock **1.21.120+** world. The newer minimum supports the native
+[redstone producer block component](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/blockreference/examples/blockcomponents/minecraftblock_redstone_producer).
+Both packs keep their v1 UUIDs and now use version `2.0.0` for replacement imports.
 
 - Redstone helmet, chestplate, leggings, and boots each provide **5 armor points**
-  and **9000 maximum durability**. The full set provides 20 armor points.
-- Worn armor uses the vanilla diamond armor models and textures with a crimson
-  render tint. Red inventory icons are included; ordinary diamond armor keeps its
-  original appearance.
-- **Conversion:** place an anvil, hold the corresponding diamond armor piece in
-  your main hand, keep a redstone comparator in your inventory, then sneak and
-  interact with the anvil (right-click/use on PC, use while sneaking on touch or
-  controller). One diamond armor piece and one comparator become the matching
-  redstone armor piece, including in Creative. No XP is required. Repeat for each
-  piece. Normal non-sneaking anvil use opens its usual interface.
-- The upgrade keeps the name, lore, compatible enchantments, and proportion of
-  durability already used. It does not reset worn armor to full durability. A
-  comparator can also repair 2250 durability through the ordinary anvil interface.
-- **Speed:** wearing any one piece grants **Speed II** (+40% movement speed) near
-  a block reporting positive redstone power. The scan checks a four-block sphere
-  around the block containing your torso every 10 ticks (half a second). It covers
-  active wires, sources, and powered devices; unpowered builds give no bonus.
-  Extra pieces do not stack the speed bonus. It expires within one second after
-  removing the armor, leaving the area, or switching off the circuit. Stronger
-  Speed effects and longer Speed II effects are kept; Speed I is upgraded to the
-  short Speed II bonus.
-- Run `/function redstone_fun_kit` with cheats enabled for diamond armor, four
-  comparators, an anvil, and a small redstone test kit. Conversion and speed do
-  not require cheats. Custom armor is also in the Creative equipment menu.
-- Download **quinns-redstone-fun-addon-v1** from GitHub Actions, extract the ZIP,
-  and open `quinns-redstone-fun.mcaddon`. Standalone behavior/resource `.mcpack`
-  imports are included. Both manifests use unique UUIDs and version `1.0.0`.
+  and **9000 maximum durability**. The full set provides 20 armor points. Worn
+  armor reuses diamond geometry/textures with a crimson tint; red inventory icons
+  are included. Ordinary diamond gear keeps its original appearance.
+- **Upgrade armor or sword:** hold the matching diamond armor piece or a diamond
+  sword, carry a redstone comparator in your inventory, then sneak-use an anvil.
+  Each upgrade consumes one diamond item and one comparator, including in
+  Creative. No XP is required. Normal anvil interaction still opens its usual UI.
+  Names, lore, and compatible enchantments are preserved. Armor keeps its
+  proportion of durability used; the new sword is permanently unbreakable.
+  Comparators can repair redstone armor by 2250 durability in the normal anvil UI.
+- **Armor powers what it touches:** every five ticks (a quarter second), equipped
+  redstone armor energizes redstone dust/devices in the wearer's feet/torso blocks,
+  directly below their feet, or the four side-adjacent blocks at either height.
+  This includes lamps, repeaters, comparators, pistons, rails, doors, and switches.
+  Temporary invisible, pass-through sources supply vanilla signal strength 15
+  through available adjacent air spaces. Dust beside touched devices is energized
+  too, allowing directional devices to receive input. Signal still follows normal
+  Minecraft attenuation and circuit rules; wearing more pieces does not stack it.
+  Existing blocks are never replaced, so fully encased circuitry with no adjacent
+  air space may need an open contact point. At most 128 temporary sources are
+  active at once; shared contact points work for multiple players.
+  Sources disappear after moving away, removing armor, or leaving the world;
+  their locations are saved so reloads and unloaded chunks are cleaned up safely.
+  Keep the pack enabled while using this feature so its cleanup script can run.
+- **Speed:** any equipped piece grants **Speed II** (+40% movement speed) within
+  a four-block sphere around the block containing the wearer's torso when nearby
+  blocks report redstone power. The speed scan runs every half second, and the
+  bonus expires within one second of leaving the powered area or removing armor.
+  Stronger/longer Speed II effects are kept; Speed I becomes the short Speed II
+  bonus. Armor's own contact power can activate this bonus.
+- **Redstone Sword:** unbreakable (no durability component) and instantly kills
+  living mobs struck in melee, using script rather than a numeric infinity damage
+  value. Players are exempt from instant kills and receive ordinary diamond-sword
+  damage. Armor stands and non-living entities are also exempt. Vanilla special
+  boss/death rules still apply if the engine refuses a kill.
+- **100-dust discharge:** strike or use the sword on redstone dust. At least
+  **100 loaded, connected dust blocks** must be in that network; then **every mob
+  standing on that network dies**, even at its far end. The dust is preserved.
+  Animals, villagers, and pets count as mobs. Players, airborne mobs, mobs on
+  separate networks, and mobs beside the wire are excluded. The dust need not
+  already be powered. Horizontal and unobstructed one-block stair connections
+  count; diagonal-only adjacency, repeaters, comparators, and gaps do not join
+  two dust networks. Smaller networks show a count and do nothing. Traversal
+  runs as a yielded job to avoid freezing large circuits. Networks larger than
+  16,384 loaded dust are rejected without a partial blast; split them first.
+- Run `/function redstone_fun_kit` with cheats enabled for diamond armor, a
+  diamond sword, five comparators, an anvil, and 128 dust plus redstone test
+  supplies. Upgrades, contact power, sword attacks, and discharges need no cheats.
+- Download **quinns-redstone-fun-addon-v2** from GitHub Actions, extract the ZIP,
+  and open `quinns-redstone-fun.mcaddon`. Standalone behavior/resource
+  `.mcpack` imports are included. Import both newer packs before testing.
 
-Bedrock does not expose a documented custom anvil transformation recipe type;
-its [recipe definition list](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/recipereference/examples/recipedefinitionlist)
-lists crafting, furnace, brewing, and smithing recipes. The sneak-use conversion
-above is the implemented alternative **at the anvil**, rather than a recipe in
-its two-slot UI. Armor stats use the native
-[wearable](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/itemreference/examples/itemcomponents/minecraft_wearable)
-and durability components.
+Bedrock's [documented recipe types](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/recipereference/examples/recipedefinitionlist)
+do not include custom anvil transformation recipes. The implemented upgrade is
+therefore a sneak-use interaction at the anvil rather than a recipe in its UI.
 
-Validation: `node tests/redstone-fun.test.cjs` checks armor stats, all four
-conversions, preservation, inventory race guards, failure rollback, powered
-proximity, and stronger potion handling. `./scripts/package.ps1` builds every
-add-on and the new import files. The workflow runs the tests before uploading
-Redstone Fun's artifact.
+Validation: `node tests/redstone-fun.test.cjs` retains armor/upgrade/speed
+checks; `node tests/redstone-fun-v2.test.cjs` checks sword upgrades, unbreakability,
+contact-power cleanup/reloads, input changes, 99/100 dust thresholds, stairs,
+disconnected networks, entity exclusions, and the large-network guard.
+`./scripts/package.ps1` builds the imports; GitHub Actions runs both test suites
+before uploading the v2 artifact. These are API-mock tests, not a Bedrock client.
 
-In-game acceptance checks (still require a Bedrock client): import both packs,
-upgrade each piece, check red visuals and a full 20-point armor bar, take damage
-to check durability, enchant and upgrade a named/damaged diamond piece, then
-compare movement near a switched-on and switched-off redstone circuit. Also
-check normal anvil repair and rendering with enchantment glint.
+In-game acceptance checks still required: import both packs, upgrade each item,
+verify armor visuals/protection/durability and unbreakable sword attacks, touch
+unpowered dust connected to a lamp/repeater/piston, then walk away and remove
+armor. Test 99 and 100 connected dust with mobs near both ends, nearby off-wire
+mobs, and a player on the wire. Reopen the world to check power-source cleanup.
 
 ## Files
 
