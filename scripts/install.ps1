@@ -42,6 +42,12 @@ $addons = @(
     ResourceDisplayName = "Quinn's Mine Some Dirt Resources"
     BehaviorPackName = "quinns_mine_some_dirt_bp"
     ResourcePackName = "quinns_mine_some_dirt_rp"
+  },
+  @{
+    BehaviorDisplayName = "Quinn's Redstone Fun"
+    ResourceDisplayName = "Quinn's Redstone Fun Resources"
+    BehaviorPackName = "quinns_redstone_fun_bp"
+    ResourcePackName = "quinns_redstone_fun_rp"
   }
 )
 

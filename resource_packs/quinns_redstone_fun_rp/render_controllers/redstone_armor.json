@@ -1,0 +1,23 @@
+{
+  "format_version": "1.8.0",
+  "render_controllers": {
+    "controller.render.quinns_redstone_fun.armor": {
+      "geometry": "Geometry.default",
+      "materials": [
+        {
+          "*": "variable.is_enchanted ? Material.enchanted : Material.default"
+        }
+      ],
+      "textures": [
+        "Texture.default",
+        "Texture.enchanted"
+      ],
+      "color": {
+        "r": 1,
+        "g": 0.08,
+        "b": 0.08,
+        "a": 1
+      }
+    }
+  }
+}

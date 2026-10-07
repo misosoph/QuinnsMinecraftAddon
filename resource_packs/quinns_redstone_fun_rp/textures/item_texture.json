@@ -1,0 +1,18 @@
+{
+  "resource_pack_name": "quinns_redstone_fun_rp",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "quinns_redstone_helmet": {
+      "textures": "textures/items/redstone_helmet"
+    },
+    "quinns_redstone_chestplate": {
+      "textures": "textures/items/redstone_chestplate"
+    },
+    "quinns_redstone_leggings": {
+      "textures": "textures/items/redstone_leggings"
+    },
+    "quinns_redstone_boots": {
+      "textures": "textures/items/redstone_boots"
+    }
+  }
+}

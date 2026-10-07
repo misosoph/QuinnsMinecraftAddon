@@ -1,0 +1,49 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "quinns_redstone_fun:redstone_helmet",
+      "menu_category": {
+        "category": "equipment",
+        "group": "itemGroup.name.helmet"
+      }
+    },
+    "components": {
+      "minecraft:display_name": {
+        "value": "Redstone Helmet"
+      },
+      "minecraft:icon": {
+        "textures": {
+          "default": "quinns_redstone_helmet"
+        }
+      },
+      "minecraft:max_stack_size": 1,
+      "minecraft:wearable": {
+        "slot": "slot.armor.head",
+        "protection": 5
+      },
+      "minecraft:durability": {
+        "max_durability": 9000
+      },
+      "minecraft:enchantable": {
+        "slot": "armor_head",
+        "value": 10
+      },
+      "minecraft:repairable": {
+        "repair_items": [
+          {
+            "items": [
+              "minecraft:comparator"
+            ],
+            "repair_amount": 2250
+          }
+        ]
+      },
+      "minecraft:tags": {
+        "tags": [
+          "minecraft:is_armor"
+        ]
+      }
+    }
+  }
+}

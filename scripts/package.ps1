@@ -41,6 +41,12 @@ $addons = @(
     StagingName = "quinns-mine-some-dirt-addon"
     BehaviorPackName = "quinns_mine_some_dirt_bp"
     ResourcePackName = "quinns_mine_some_dirt_rp"
+  },
+  @{
+    PackageName = "quinns-redstone-fun"
+    StagingName = "quinns-redstone-fun-addon"
+    BehaviorPackName = "quinns_redstone_fun_bp"
+    ResourcePackName = "quinns_redstone_fun_rp"
   }
 )
 

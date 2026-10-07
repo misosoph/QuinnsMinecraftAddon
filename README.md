@@ -76,6 +76,60 @@ Activate **Quinn's Mine Some Dirt Resources** and **Quinn's Mine Some Dirt** in 
 - Run `/function mine_some_dirt_kit` with cheats enabled for 64 dirt and a shovel. Mining itself does not require cheats. Explosions and command-based block removal do not trigger the player mining bonus.
 - Download **quinns-mine-some-dirt-addon-v1** from GitHub Actions, extract the ZIP, and open `quinns-mine-some-dirt.mcaddon`. Separate BP/RP imports are included. Both manifests start at version `1.0.0` with unique UUIDs.
 
+### Quinn's Redstone Fun (v1.0.0)
+
+Activate **Quinn's Redstone Fun Resources** and **Quinn's Redstone Fun** in a
+Minecraft Bedrock 1.21.60+ world. No experimental features are required.
+
+- Redstone helmet, chestplate, leggings, and boots each provide **5 armor points**
+  and **9000 maximum durability**. The full set provides 20 armor points.
+- Worn armor uses the vanilla diamond armor models and textures with a crimson
+  render tint. Red inventory icons are included; ordinary diamond armor keeps its
+  original appearance.
+- **Conversion:** place an anvil, hold the corresponding diamond armor piece in
+  your main hand, keep a redstone comparator in your inventory, then sneak and
+  interact with the anvil (right-click/use on PC, use while sneaking on touch or
+  controller). One diamond armor piece and one comparator become the matching
+  redstone armor piece, including in Creative. No XP is required. Repeat for each
+  piece. Normal non-sneaking anvil use opens its usual interface.
+- The upgrade keeps the name, lore, compatible enchantments, and proportion of
+  durability already used. It does not reset worn armor to full durability. A
+  comparator can also repair 2250 durability through the ordinary anvil interface.
+- **Speed:** wearing any one piece grants **Speed II** (+40% movement speed) near
+  a block reporting positive redstone power. The scan checks a four-block sphere
+  around the block containing your torso every 10 ticks (half a second). It covers
+  active wires, sources, and powered devices; unpowered builds give no bonus.
+  Extra pieces do not stack the speed bonus. It expires within one second after
+  removing the armor, leaving the area, or switching off the circuit. Stronger
+  Speed effects and longer Speed II effects are kept; Speed I is upgraded to the
+  short Speed II bonus.
+- Run `/function redstone_fun_kit` with cheats enabled for diamond armor, four
+  comparators, an anvil, and a small redstone test kit. Conversion and speed do
+  not require cheats. Custom armor is also in the Creative equipment menu.
+- Download **quinns-redstone-fun-addon-v1** from GitHub Actions, extract the ZIP,
+  and open `quinns-redstone-fun.mcaddon`. Standalone behavior/resource `.mcpack`
+  imports are included. Both manifests use unique UUIDs and version `1.0.0`.
+
+Bedrock does not expose a documented custom anvil transformation recipe type;
+its [recipe definition list](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/recipereference/examples/recipedefinitionlist)
+lists crafting, furnace, brewing, and smithing recipes. The sneak-use conversion
+above is the implemented alternative **at the anvil**, rather than a recipe in
+its two-slot UI. Armor stats use the native
+[wearable](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/itemreference/examples/itemcomponents/minecraft_wearable)
+and durability components.
+
+Validation: `node tests/redstone-fun.test.cjs` checks armor stats, all four
+conversions, preservation, inventory race guards, failure rollback, powered
+proximity, and stronger potion handling. `./scripts/package.ps1` builds every
+add-on and the new import files. The workflow runs the tests before uploading
+Redstone Fun's artifact.
+
+In-game acceptance checks (still require a Bedrock client): import both packs,
+upgrade each piece, check red visuals and a full 20-point armor bar, take damage
+to check durability, enchant and upgrade a named/damaged diamond piece, then
+compare movement near a switched-on and switched-off redstone circuit. Also
+check normal anvil repair and rendering with enchantment glint.
+
 ## Files
 
 ```text
@@ -176,6 +230,9 @@ This creates:
 - `dist/quinns-mine-some-dirt.mcaddon`
 - `dist/quinns-mine-some-dirt-bp.mcpack`
 - `dist/quinns-mine-some-dirt-rp.mcpack`
+- `dist/quinns-redstone-fun.mcaddon`
+- `dist/quinns-redstone-fun-bp.mcpack`
+- `dist/quinns-redstone-fun-rp.mcpack`
 
 > Note: do not commit packaged binaries to pull requests if your PR workflow
 > rejects binary files. This repo ignores `dist/*.mcaddon` and publishes the
