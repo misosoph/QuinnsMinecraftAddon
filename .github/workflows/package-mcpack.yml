@@ -83,11 +83,12 @@ jobs:
         run: |
           node tests/redstone-fun.test.cjs
           node tests/redstone-fun-v2.test.cjs
+          node tests/redstone-armor-equipment.test.cjs
 
-      - name: Upload Redstone Fun v2 artifact
+      - name: Upload Redstone Fun v2.0.1 artifact
         uses: actions/upload-artifact@v4
         with:
-          name: quinns-redstone-fun-addon-v2
+          name: quinns-redstone-fun-addon-v2.0.1
           path: |
             dist/quinns-redstone-fun.mcaddon
             dist/quinns-redstone-fun-bp.mcpack

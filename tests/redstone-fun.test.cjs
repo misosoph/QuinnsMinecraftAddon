@@ -130,7 +130,7 @@ for (const reason of ["no comparator", "changed selection", "removed anvil", "bu
 }
 
 const manifests = [bp, rp].map(pack => JSON.parse(fs.readFileSync(`${pack}/manifest.json`)));
-assert.deepEqual(manifests[0].header.version, [2, 0, 0]);
+assert.deepEqual(manifests[0].header.version, [2, 0, 1]);
 assert.equal(manifests[0].dependencies[1].uuid, manifests[1].header.uuid);
 const atlas = JSON.parse(fs.readFileSync(`${rp}/textures/item_texture.json`));
 for (const icon of Object.values(atlas.texture_data)) assert.ok(fs.existsSync(path.join(rp, icon.textures + ".png")), "inventory icon exists");

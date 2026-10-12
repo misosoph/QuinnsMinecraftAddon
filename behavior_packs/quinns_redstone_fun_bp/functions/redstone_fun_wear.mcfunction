@@ -1,0 +1,1 @@
+scriptevent quinns_redstone_fun:wear

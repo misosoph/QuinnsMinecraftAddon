@@ -1,5 +1,5 @@
 {
-  "format_version": "1.8.0",
+  "format_version": "1.10.0",
   "minecraft:attachable": {
     "description": {
       "identifier": "quinns_redstone_fun:redstone_leggings",
@@ -8,7 +8,7 @@
         "enchanted": "armor_enchanted"
       },
       "textures": {
-        "default": "textures/models/armor/diamond_2",
+        "default": "textures/models/armor/redstone_base_2",
         "enchanted": "textures/misc/enchanted_actor_glint"
       },
       "geometry": {
@@ -19,7 +19,10 @@
       },
       "render_controllers": [
         "controller.render.quinns_redstone_fun.armor"
-      ]
+      ],
+      "item": {
+        "quinns_redstone_fun:redstone_leggings": "query.owner_identifier != 'minecraft:player'"
+      }
     }
   }
 }

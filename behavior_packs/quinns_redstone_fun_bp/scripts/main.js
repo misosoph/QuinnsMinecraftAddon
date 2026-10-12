@@ -1,5 +1,6 @@
 import { world, system, ItemStack, EquipmentSlot } from "@minecraft/server";
 import "./redstone_mechanics.js";
+import "./equip_armor.js";
 
 const PREFIX = "quinns_redstone_fun:redstone_";
 const ANVILS = new Set(["minecraft:anvil", "minecraft:chipped_anvil", "minecraft:damaged_anvil"]);

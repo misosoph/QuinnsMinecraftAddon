@@ -42,3 +42,21 @@ Prompt:
 > all sides. Crisp low-resolution pixel art, no glow, no decoration, no text,
 > no extra objects. This is the Redstone Sword for Quinn's Redstone Fun Minecraft
 > Bedrock add-on. The output will be resized to 32x32 pixels.
+
+## v2.0.1 worn armor resources
+
+The dedicated player armor model, alignment animations, player attachable layout,
+and unmodified diamond base textures are from Mojang's Bedrock samples:
+
+- https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/models/entity/player_armor.json
+- https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/animations/armor.animation.json
+- https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/attachables/diamond_chestplate.player.json
+- https://github.com/Mojang/bedrock-samples/tree/main/resource_pack/textures/models/armor
+
+Model/animation identifiers use this pack's namespace. The render controller adds
+the red tint without changing the source texture pixels. Player-only mappings
+and offset animations match the vanilla diamond player armor setup. Non-player
+armor attachables have separate owner conditions so they cannot compete with the
+player model. Wearable items let the native armor slot enforce stack size one,
+avoiding the explicit-stack-size compatibility issue documented at
+https://learn.microsoft.com/en-us/minecraft/creator/reference/content/itemreference/examples/itemcomponents/minecraft_wearable.

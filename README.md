@@ -76,17 +76,26 @@ Activate **Quinn's Mine Some Dirt Resources** and **Quinn's Mine Some Dirt** in 
 - Run `/function mine_some_dirt_kit` with cheats enabled for 64 dirt and a shovel. Mining itself does not require cheats. Explosions and command-based block removal do not trigger the player mining bonus.
 - Download **quinns-mine-some-dirt-addon-v1** from GitHub Actions, extract the ZIP, and open `quinns-mine-some-dirt.mcaddon`. Separate BP/RP imports are included. Both manifests start at version `1.0.0` with unique UUIDs.
 
-### Quinn's Redstone Fun (v2.0.0)
+### Quinn's Redstone Fun (v2.0.1)
 
 Activate **Quinn's Redstone Fun Resources** and **Quinn's Redstone Fun** in a
 Minecraft Bedrock **1.21.120+** world. The newer minimum supports the native
 [redstone producer block component](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/blockreference/examples/blockcomponents/minecraftblock_redstone_producer).
-Both packs keep their v1 UUIDs and now use version `2.0.0` for replacement imports.
+Both packs keep their v1 UUIDs and now use version `2.0.1` for replacement imports.
 
 - Redstone helmet, chestplate, leggings, and boots each provide **5 armor points**
   and **9000 maximum durability**. The full set provides 20 armor points. Worn
   armor reuses diamond geometry/textures with a crimson tint; red inventory icons
   are included. Ordinary diamond gear keeps its original appearance.
+- **Wear and see the armor (v2.0.1 fix):** the pack now bundles dedicated player
+  armor models, alignment animations, and worn textures, with explicit player
+  attachable mappings. Redstone armor can go in its matching inventory armor slot
+  or be equipped using the item. A use-to-equip fallback swaps previous armor back
+  into the held inventory slot without losing names, damage, or enchantments.
+  With cheats enabled, `/function redstone_fun_wear` equips redstone armor already
+  in your inventory; `/function redstone_armor_kit` gives and equips all four pieces.
+  Check your character in the inventory preview or third-person view. Import
+  **both** v2.0.1 packs and ensure the resource pack is active in the world.
 - **Upgrade armor or sword:** hold the matching diamond armor piece or a diamond
   sword, carry a redstone comparator in your inventory, then sneak-use an anvil.
   Each upgrade consumes one diamond item and one comparator, including in
@@ -132,7 +141,7 @@ Both packs keep their v1 UUIDs and now use version `2.0.0` for replacement impor
 - Run `/function redstone_fun_kit` with cheats enabled for diamond armor, a
   diamond sword, five comparators, an anvil, and 128 dust plus redstone test
   supplies. Upgrades, contact power, sword attacks, and discharges need no cheats.
-- Download **quinns-redstone-fun-addon-v2** from GitHub Actions, extract the ZIP,
+- Download **quinns-redstone-fun-addon-v2.0.1** from GitHub Actions, extract the ZIP,
   and open `quinns-redstone-fun.mcaddon`. Standalone behavior/resource
   `.mcpack` imports are included. Import both newer packs before testing.
 
@@ -144,8 +153,11 @@ Validation: `node tests/redstone-fun.test.cjs` retains armor/upgrade/speed
 checks; `node tests/redstone-fun-v2.test.cjs` checks sword upgrades, unbreakability,
 contact-power cleanup/reloads, input changes, 99/100 dust thresholds, stairs,
 disconnected networks, entity exclusions, and the large-network guard.
-`./scripts/package.ps1` builds the imports; GitHub Actions runs both test suites
-before uploading the v2 artifact. These are API-mock tests, not a Bedrock client.
+`node tests/redstone-armor-equipment.test.cjs` validates bundled player render
+resources, wearable settings, actual inventory-to-equipment transfers, rollback,
+and native-equip duplication guards.
+`./scripts/package.ps1` builds the imports; GitHub Actions runs all three test suites
+before uploading the v2.0.1 artifact. These are API-mock tests, not a Bedrock client.
 
 In-game acceptance checks still required: import both packs, upgrade each item,
 verify armor visuals/protection/durability and unbreakable sword attacks, touch
